@@ -2,7 +2,7 @@ FROM node:12
 
 COPY ./package*.json ./
 
-RUN npm ci --only=production && \
+RUN npm ci && \
     npm i -g typescript
 
 COPY ./ .
