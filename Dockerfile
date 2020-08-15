@@ -1,6 +1,6 @@
 FROM node:12
 
-COPY ./package.json ./
+COPY ./package*.json ./
 
 RUN npm ci --only=production && \
     npm i -g typescript
