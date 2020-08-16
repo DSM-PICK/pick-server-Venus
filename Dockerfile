@@ -13,4 +13,4 @@ RUN npm run build && \
 
 EXPOSE 8080
 
-CMD ["node", "src"]
+CMD ["node", "src/app.js"]
