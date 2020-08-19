@@ -1,7 +1,9 @@
 import * as express from "express";
 import * as cors from "cors";
+
 import route from "../api";
 import { apiNotFoundError } from "../errors";
+import logger from "./logger";
 
 export default ({ app }: { app: express.Application }) => {
   app.use(cors());
@@ -15,6 +17,9 @@ export default ({ app }: { app: express.Application }) => {
   });
 
   app.use((err, req, res, next) => {
+    logger.error(
+      `${req.method} ${req.url} ${err.status || 500} : ${err.message}`
+    );
     res.status(err.status || 500);
     res.json({
       message: err.message,

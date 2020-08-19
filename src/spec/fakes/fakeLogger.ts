@@ -1,4 +1,4 @@
-import ILogger from "../../interfaces/loggerInterface";
+import ILogger from "../../interfaces/ILogger";
 
 const fakeLogger: ILogger = {
   info(message: string) {},

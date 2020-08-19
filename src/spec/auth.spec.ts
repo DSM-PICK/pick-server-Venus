@@ -1,19 +1,20 @@
-import * as chai from "chai";
 import * as sinon from "sinon";
 import * as jwt from "jsonwebtoken";
+import { expect, use } from "chai";
+import * as chaiAsPromised from "chai-as-promised";
 
 import { AuthService } from "../services";
-import { fakeAdminRepository, fakeLogger } from "./fakes";
+import { FakeAdminRepository, fakeLogger } from "./fakes";
 import { IAdmin } from "../interfaces";
 import { invalidLoginInformationError } from "../errors";
 
-chai.should();
+use(chaiAsPromised);
 
 describe("AuthService", () => {
   const jwtSecret = "venus_test";
   let stub;
   const authService = new AuthService(
-    fakeAdminRepository,
+    new FakeAdminRepository(),
     fakeLogger,
     jwtSecret
   );
@@ -44,30 +45,22 @@ describe("AuthService", () => {
       .returns("refresh_token");
 
     const result = await authService.signIn(admin);
-    result.should.be.deep.equal(expectedResult);
+    expect(result).to.deep.equal(expectedResult);
   });
 
-  it("should throw invalid login info error with invalid id", (done) => {
+  it("should throw invalid login info error with invalid id", () => {
     const admin: IAdmin = { id: "invalid", pw: "validpass" };
 
-    authService
-      .signIn(admin)
-      .then(() => done(new Error("error")))
-      .catch((e) => {
-        e.should.deep.equal(invalidLoginInformationError);
-        done();
-      });
+    expect(authService.signIn(admin)).to.be.rejectedWith(
+      invalidLoginInformationError
+    );
   });
 
-  it("should throw invalid login info error with invalid pw", (done) => {
+  it("should throw invalid login info error with invalid pw", () => {
     const admin: IAdmin = { id: "admin", pw: "invalidpass" };
 
-    authService
-      .signIn(admin)
-      .then(() => done(new Error("err")))
-      .catch((e) => {
-        e.should.deep.equal(invalidLoginInformationError);
-        done();
-      });
+    expect(authService.signIn(admin)).to.be.rejectedWith(
+      invalidLoginInformationError
+    );
   });
 });
