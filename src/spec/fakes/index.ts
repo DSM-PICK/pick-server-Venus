@@ -1,4 +1,5 @@
-import fakeAdminRepository from "./fakeAdminRepository";
+import FakeAdminRepository from "./FakeAdminRepository";
 import fakeLogger from "./fakeLogger";
+import FakeClubRepository from "./FakeClubRepository";
 
-export { fakeAdminRepository, fakeLogger };
+export { FakeAdminRepository, fakeLogger, FakeClubRepository };
