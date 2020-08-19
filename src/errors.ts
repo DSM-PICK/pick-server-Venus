@@ -11,9 +11,15 @@ class HttpError extends Error {
 const invalidLoginInformationError = new HttpError("Invalid id or pw", 403, "");
 const invalidParameterError = new HttpError("Invalid parameter", 400, "");
 const apiNotFoundError = new HttpError("API not found", 404, "");
+const expiredOrInvalidTokenError = new HttpError(
+  "Expired or invalid token",
+  401,
+  ""
+);
 
 export {
   invalidLoginInformationError,
   invalidParameterError,
   apiNotFoundError,
+  expiredOrInvalidTokenError,
 };
