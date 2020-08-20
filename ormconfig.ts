@@ -1,4 +1,14 @@
 import config from "./src/config";
+import {
+  Activity,
+  Admin,
+  Attendance,
+  Class,
+  Club,
+  PriorAbsence,
+  Student,
+  Teacher,
+} from "./src/models";
 
 export = {
   type: "mysql",
@@ -9,5 +19,14 @@ export = {
   database: config.mysql.dbName,
   synchronize: false,
   logging: false,
-  entities: ["./src/models/**/*.ts"],
+  entities: [
+    Admin,
+    Activity,
+    Attendance,
+    Class,
+    Club,
+    PriorAbsence,
+    Student,
+    Teacher,
+  ],
 };
