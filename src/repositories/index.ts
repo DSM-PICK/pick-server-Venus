@@ -1,3 +1,4 @@
 import AdminRepository from "./adminRepository";
+import ClubRepository from "./clubRepository";
 
-export { AdminRepository };
+export { AdminRepository, ClubRepository };
