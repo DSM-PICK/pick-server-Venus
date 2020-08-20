@@ -20,9 +20,9 @@ export default (req: Request, res: Response, next: NextFunction) => {
   } catch (e) {
     if (e === TokenExpiredError) {
       return next(expiredTokenError);
-    } else if (e === JsonWebTokenError) {
-      return next(invalidTokenError);
+    } else if (e === notAccessTokenError) {
+      return next(e);
     }
-    next(notAccessTokenError);
+    next(invalidTokenError);
   }
 };
