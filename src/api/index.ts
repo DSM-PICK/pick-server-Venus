@@ -6,6 +6,9 @@ import logger from "../loaders/logger";
 export default () => {
   const app = Router();
 
+  app.get("/check", (req, res) => {
+    res.status(200).end();
+  });
   app.get("/status", (req, res) => {
     logger.debug("health check");
     res.status(200).end();
