@@ -1,15 +1,15 @@
 import { EntityRepository, Repository } from "typeorm";
-import { Club } from "../models";
+import { Club, ClubLocation } from "../models";
 import { IClub, IClubRepository } from "../interfaces";
 
 @EntityRepository(Club)
 export default class ClubRepository extends Repository<Club>
   implements IClubRepository {
-  public findAll(): Promise<Club[]> {
-    return this.find();
+  public async findAll(): Promise<Club[]> {
+    return this.find({ relations: ["clubLocation"] });
   }
 
-  public addClub(club: IClub): Promise<Club> {
+  public addClub(club: Club): Promise<Club> {
     return this.save(club);
   }
 

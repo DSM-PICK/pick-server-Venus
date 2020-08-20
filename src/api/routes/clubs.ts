@@ -5,27 +5,30 @@ import ClubRepository from "../../repositories/clubRepository";
 import ClubService from "../../services/clubService";
 import logger from "../../loaders/logger";
 import ClubLocationRepository from "../../repositories/clubLocationRepository";
+import { getCustomRepository } from "typeorm";
 
 const route = Router();
 
 export default (app: Router) => {
   app.use("/clubs", route);
 
+  const clubRepository = getCustomRepository(ClubRepository);
+  const clubLocationRepository = getCustomRepository(ClubLocationRepository);
+  const clubService = new ClubService(
+    clubRepository,
+    clubLocationRepository,
+    logger
+  );
+
   route.get(
     "/",
     isAuth,
     async (req: Request, res: Response, next: NextFunction) => {
-      const clubRepository = new ClubRepository();
-      const clubLocationRepository = new ClubLocationRepository();
-      const clubService = new ClubService(
-        clubRepository,
-        clubLocationRepository,
-        logger
-      );
       try {
         const clubs = await clubService.getClubs();
-        res.json(200).json(clubs);
+        res.status(200).json(clubs);
       } catch (e) {
+        console.log(e);
         next(e);
       }
     }
