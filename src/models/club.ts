@@ -1,10 +1,12 @@
-import { Column, Entity, PrimaryColumn } from "typeorm";
+import { JoinColumn, Entity, OneToOne, PrimaryColumn } from "typeorm";
+import { ClubLocation } from "./clubLocation";
 
 @Entity()
 export class Club {
   @PrimaryColumn({ length: 20 })
   name: string;
 
-  @Column({ length: 20, unique: true })
-  location: string;
+  @OneToOne((type) => ClubLocation, (clubLocation) => clubLocation.location)
+  @JoinColumn({ name: "location" })
+  clubLocation: ClubLocation;
 }
