@@ -6,7 +6,7 @@ import { IClub, IClubRepository } from "../interfaces";
 export default class ClubRepository extends Repository<Club>
   implements IClubRepository {
   public async findAll(): Promise<Club[]> {
-    return this.find({ relations: ["clubLocation"] });
+    return this.find();
   }
 
   public addClub(club: Club): Promise<Club> {
