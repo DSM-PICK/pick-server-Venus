@@ -8,6 +8,7 @@ import {
   PriorAbsence,
   Student,
   Teacher,
+  ClubLocation,
 } from "./src/models";
 
 export = {
@@ -28,5 +29,6 @@ export = {
     PriorAbsence,
     Student,
     Teacher,
+    ClubLocation,
   ],
 };

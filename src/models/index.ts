@@ -6,6 +6,7 @@ import { Club } from "./club";
 import { PriorAbsence } from "./priorAbsence";
 import { Student } from "./student";
 import { Teacher } from "./teacher";
+import { ClubLocation } from "./clubLocation";
 
 export {
   Activity,
@@ -16,4 +17,5 @@ export {
   PriorAbsence,
   Student,
   Teacher,
+  ClubLocation,
 };
