@@ -7,7 +7,7 @@ import {
   invalidTokenError,
   notAccessTokenError,
 } from "../../../errors";
-import { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
+import { TokenExpiredError } from "jsonwebtoken";
 
 export default (req: Request, res: Response, next: NextFunction) => {
   const token = req.get("Authorization");
@@ -18,7 +18,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
     });
     next();
   } catch (e) {
-    if (e === TokenExpiredError) {
+    if (e instanceof TokenExpiredError) {
       return next(expiredTokenError);
     } else if (e === notAccessTokenError) {
       return next(e);
