@@ -2,11 +2,11 @@ import config from "./src/config";
 
 export = {
   type: "mysql",
-  host: config.dbHost,
-  port: Number(config.dbPort),
-  username: config.dbUser,
-  password: config.dbPass,
-  database: config.dbName,
+  host: config.mysql.dbHost,
+  port: Number(config.mysql.dbPort),
+  username: config.mysql.dbUser,
+  password: config.mysql.dbPass,
+  database: config.mysql.dbName,
   synchronize: false,
   logging: false,
   entities: ["./src/models/**/*.ts"],
