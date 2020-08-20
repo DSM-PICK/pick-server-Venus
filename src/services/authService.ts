@@ -2,7 +2,11 @@ import * as bcrypt from "bcrypt";
 import * as jwt from "jsonwebtoken";
 
 import { IAdmin, IAdminRepository, ILogger } from "../interfaces";
-import { invalidLoginInformationError, notRefreshTokenError } from "../errors";
+import {
+  invalidLoginInformationError,
+  invalidTokenError,
+  notRefreshTokenError,
+} from "../errors";
 
 export default class AuthService {
   constructor(
@@ -41,7 +45,11 @@ export default class AuthService {
   }: {
     refresh_token: string;
   }): { access_token: string } {
-    const refreshPayload: any = jwt.verify(refresh_token, this.jwtSecret);
+    const splitToken = refresh_token.split(" ");
+    if (splitToken[0] !== "Bearer") {
+      throw invalidTokenError;
+    }
+    const refreshPayload: any = jwt.verify(splitToken[1], this.jwtSecret);
     if (refreshPayload.type !== "refresh") {
       throw notRefreshTokenError;
     }
