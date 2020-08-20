@@ -5,7 +5,7 @@ export default async () => {
   try {
     await createConnection();
   } catch (e) {
-    logger.error(`database connection error : ${e}`);
+    logger.error(`mysql connection error : ${e}`);
     process.exit(1);
     return;
   }
