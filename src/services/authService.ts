@@ -2,7 +2,7 @@ import * as bcrypt from "bcrypt";
 import * as jwt from "jsonwebtoken";
 
 import { IAdmin, IAdminRepository, ILogger } from "../interfaces";
-import { invalidLoginInformationError } from "../errors";
+import { invalidLoginInformationError, notRefreshTokenError } from "../errors";
 
 export default class AuthService {
   constructor(
@@ -23,14 +23,36 @@ export default class AuthService {
       throw invalidLoginInformationError;
     }
 
-    const access_token = this.generateToken(adminRecord.id, "access");
-    const refresh_token = this.generateToken(adminRecord.id, "refresh");
+    const access_token = this.generateToken({
+      id: adminRecord.id,
+      type: "access",
+    });
+    const refresh_token = this.generateToken({
+      id: adminRecord.id,
+      type: "refresh",
+    });
     this.logger.debug("token generated");
 
     return { access_token, refresh_token };
   }
 
-  private generateToken(id, type): string {
+  public tokenRefresh({
+    refresh_token,
+  }: {
+    refresh_token: string;
+  }): { access_token: string } {
+    const refreshPayload: any = jwt.verify(refresh_token, this.jwtSecret);
+    if (refreshPayload.type !== "refresh") {
+      throw notRefreshTokenError;
+    }
+    const access_token = this.generateToken({
+      id: refreshPayload.id,
+      type: "access",
+    });
+    return { access_token };
+  }
+
+  private generateToken({ id, type }: { id: string; type: string }) {
     return jwt.sign({ id, type }, this.jwtSecret, {
       expiresIn: type === "access" ? "30m" : type === "refresh" ? "14d" : 0,
     });
