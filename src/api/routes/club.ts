@@ -5,18 +5,18 @@ import isAuth from "../middlewares/tokenVerification";
 import { clubSchema } from "../middlewares/paramValidation/schema";
 import { invalidParameterError } from "../../errors";
 import { IClub } from "../../interfaces";
-import ClubRepository from "../../repositories/clubRepository";
-import ClubLocationRepository from "../../repositories/clubLocationRepository";
+import { ClubRepository, ClubLocationRepository } from "../../repositories";
 import ClubService from "../../services/clubService";
 import logger from "../../loaders/logger";
+import { getCustomRepository } from "typeorm";
 
 const route = Router();
 
 export default (app: Router) => {
   app.use("/club", route);
 
-  const clubRepository = new ClubRepository();
-  const clubLocationRepository = new ClubLocationRepository();
+  const clubRepository = getCustomRepository(ClubRepository);
+  const clubLocationRepository = getCustomRepository(ClubLocationRepository);
   const clubService = new ClubService(
     clubRepository,
     clubLocationRepository,
