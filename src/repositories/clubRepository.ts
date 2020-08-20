@@ -9,14 +9,12 @@ export default class ClubRepository extends Repository<Club>
     return this.find({ relations: ["clubLocation"] });
   }
 
-  public addClub(club: IClub): Promise<Club> {
+  public addClub(club: Club): Promise<Club> {
     return this.save(club);
   }
 
   public getClubByLocation(location: string): Promise<Club> {
-    const clubLocation = new ClubLocation();
-    clubLocation.location = location;
-    return this.findOne({ clubLocation });
+    return this.findOne({ location });
   }
 
   public getClubByName(name: string): Promise<Club> {
