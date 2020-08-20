@@ -14,14 +14,6 @@ export default (app: Router) => {
 
   route.get(
     "/",
-    async (req: Request, res: Response, next: NextFunction) => {
-      try {
-        await validate({ schema: authSchema, value: req.headers });
-        next();
-      } catch (e) {
-        next(e);
-      }
-    },
     isAuth,
     async (req: Request, res: Response, next: NextFunction) => {
       const clubRepository = new ClubRepository();
