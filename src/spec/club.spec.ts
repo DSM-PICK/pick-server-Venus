@@ -2,33 +2,61 @@ import { expect } from "chai";
 
 import { ClubService } from "../services";
 import { fakeLogger, FakeClubRepository } from "./fakes";
+import FakeClubLocationRepository from "./fakes/FakeClubLocationRepository";
+import { Club, ClubLocation } from "../models";
+import { invalidParameterError } from "../errors";
 
 describe("ClubService", () => {
   const clubRepository = new FakeClubRepository();
-  const clubService = new ClubService(clubRepository, fakeLogger);
-  const exampleClubs = [
+  const clubLocationRepository = new FakeClubLocationRepository();
+  const clubService = new ClubService(
+    clubRepository,
+    clubLocationRepository,
+    fakeLogger
+  );
+
+  const exmapleClubLocations: ClubLocation[] = [
     {
-      name: "팬텀",
-      floor: 2,
       location: "소개 2실",
+      floor: 2,
       priority: 0,
     },
     {
-      name: "Entry",
-      floor: 2,
       location: "소개 3실",
+      floor: 2,
       priority: 1,
     },
     {
-      name: "Up",
-      floor: 3,
       location: "보안 2실",
+      floor: 3,
       priority: 0,
+    },
+    {
+      location: "보안 1실",
+      floor: 3,
+      priority: 1,
+    },
+  ];
+  const exampleClubs: Club[] = [
+    {
+      name: "팬텀",
+      location: "소개 2실",
+    },
+    {
+      name: "Entry",
+      location: "소개 3실",
+    },
+    {
+      name: "Up",
+      location: "보안 2실",
     },
   ];
 
   beforeEach(async () => {
     let jobs = [];
+    exmapleClubLocations.forEach((clubLocation) =>
+      jobs.push(clubLocationRepository.addLocation(clubLocation))
+    );
     exampleClubs.forEach((club) => jobs.push(clubRepository.addClub(club)));
     await Promise.all(jobs);
   });
@@ -40,5 +68,28 @@ describe("ClubService", () => {
   it("should return all club", async () => {
     const clubs = await clubService.getClubs();
     expect(clubs).to.deep.equal(exampleClubs);
+  });
+
+  it("should add club", async () => {
+    const club: Club = { name: "ImagineClub", location: "보안 1실" };
+    expect(await clubService.addClub(club)).to.deep.equal(club);
+    expect(await clubService.getClubs()).to.deep.equal(
+      exampleClubs.concat(club)
+    );
+  });
+
+  it("should throw invalid parameter error with existing name", () => {
+    const club: Club = { name: "Entry", location: "보안 1실" };
+    expect(clubService.addClub(club)).to.be.rejectedWith(invalidParameterError);
+  });
+
+  it("should throw invalid parameter error with nonexistent location", () => {
+    const club: Club = { name: "ImagineClub", location: "세미나실 3-2" };
+    expect(clubService.addClub(club)).to.be.rejectedWith(invalidParameterError);
+  });
+
+  it("should throw invalid parameter error with occupied location", () => {
+    const club: Club = { name: "ImagineClub", location: "소개 2실" };
+    expect(clubService.addClub(club)).to.be.rejectedWith(invalidParameterError);
   });
 });

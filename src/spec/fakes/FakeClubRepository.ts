@@ -20,4 +20,16 @@ export default class FakeClubRepository implements IClubRepository {
   public clear(): void {
     this.clubs = [];
   }
+
+  public getClubByLocation(location: string): Promise<Club> {
+    return new Promise<Club>((resolve) => {
+      resolve(this.clubs.find((club) => club.location === location));
+    });
+  }
+
+  public getClubByName(name: string): Promise<Club> {
+    return new Promise<Club>((resolve) => {
+      resolve(this.clubs.find((club) => club.name === name));
+    });
+  }
 }
