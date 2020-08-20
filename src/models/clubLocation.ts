@@ -1,10 +1,13 @@
 import { Column, Entity, PrimaryColumn } from "typeorm";
 
 @Entity()
-export class Club {
+export class ClubLocation {
   @PrimaryColumn({ length: 20 })
-  name: string;
-
-  @Column({ length: 20, unique: true })
   location: string;
+
+  @Column()
+  floor: number;
+
+  @Column()
+  priority: number;
 }
