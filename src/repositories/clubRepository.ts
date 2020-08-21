@@ -1,12 +1,41 @@
 import { EntityRepository, Repository } from "typeorm";
 import { Club, ClubLocation } from "../models";
-import { IClub, IClubRepository } from "../interfaces";
+import { IClubRepository } from "../interfaces";
 
 @EntityRepository(Club)
 export default class ClubRepository extends Repository<Club>
   implements IClubRepository {
   public async findAll(): Promise<Club[]> {
-    return this.find();
+    return (
+      await this.createQueryBuilder("club")
+        .leftJoinAndSelect(
+          ClubLocation,
+          "clubLocation",
+          "club.location = clubLocation.location"
+        )
+        .getRawMany()
+    ).map((club) => {
+      const obj: Club = {} as Club;
+      Object.defineProperties(obj, {
+        name: {
+          value: club.club_name,
+          enumerable: true,
+        },
+        location: {
+          value: club.club_location,
+          enumerable: true,
+        },
+        floor: {
+          value: club.clubLocation_floor,
+          enumerable: true,
+        },
+        priority: {
+          value: club.clubLocation_priority,
+          enumerable: true,
+        },
+      });
+      return obj;
+    });
   }
 
   public addClub(club: Club): Promise<Club> {
