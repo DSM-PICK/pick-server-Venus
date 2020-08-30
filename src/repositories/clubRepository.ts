@@ -49,4 +49,8 @@ export default class ClubRepository extends Repository<Club>
   public getClubByName(name: string): Promise<Club> {
     return this.findOne({ name });
   }
+
+  public async deleteClubByName(name: string): Promise<void> {
+    await this.delete({ name });
+  }
 }
