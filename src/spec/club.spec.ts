@@ -4,7 +4,7 @@ import { ClubService } from "../services";
 import { fakeLogger, FakeClubRepository } from "./fakes";
 import FakeClubLocationRepository from "./fakes/FakeClubLocationRepository";
 import { Club, ClubLocation } from "../models";
-import { invalidParameterError } from "../errors";
+import { clubNotFoundError, invalidParameterError } from "../errors";
 
 describe("ClubService", () => {
   const clubRepository = new FakeClubRepository();
@@ -65,31 +65,58 @@ describe("ClubService", () => {
     clubRepository.clear();
   });
 
-  it("should return all club", async () => {
-    const clubs = await clubService.getClubs();
-    expect(clubs).to.deep.equal(exampleClubs);
+  describe("getClubs()", () => {
+    it("should return all club", async () => {
+      const clubs = await clubService.getClubs();
+      expect(clubs).to.deep.equal(exampleClubs);
+    });
   });
 
-  it("should add club", async () => {
-    const club: Club = { name: "ImagineClub", location: "보안 1실" };
-    expect(await clubService.addClub(club)).to.deep.equal(club);
-    expect(await clubService.getClubs()).to.deep.equal(
-      exampleClubs.concat(club)
-    );
+  describe("addClub()", () => {
+    it("should add club", async () => {
+      const club: Club = { name: "ImagineClub", location: "보안 1실" };
+      expect(await clubService.addClub(club)).to.deep.equal(club);
+      expect(await clubService.getClubs()).to.deep.equal(
+        exampleClubs.concat(club)
+      );
+    });
+
+    it("should throw invalid parameter error with existing name", () => {
+      const club: Club = { name: "Entry", location: "보안 1실" };
+      expect(clubService.addClub(club)).to.be.rejectedWith(
+        invalidParameterError
+      );
+    });
+
+    it("should throw invalid parameter error with nonexistent location", () => {
+      const club: Club = { name: "ImagineClub", location: "세미나실 3-2" };
+      expect(clubService.addClub(club)).to.be.rejectedWith(
+        invalidParameterError
+      );
+    });
+
+    it("should throw invalid parameter error with occupied location", () => {
+      const club: Club = { name: "ImagineClub", location: "소개 2실" };
+      expect(clubService.addClub(club)).to.be.rejectedWith(
+        invalidParameterError
+      );
+    });
   });
 
-  it("should throw invalid parameter error with existing name", () => {
-    const club: Club = { name: "Entry", location: "보안 1실" };
-    expect(clubService.addClub(club)).to.be.rejectedWith(invalidParameterError);
-  });
+  describe("deleteClub", () => {
+    it("should delete club", async () => {
+      const deletedName = "팬텀";
+      await clubService.deleteClub(deletedName);
+      expect(await clubService.getClubs()).to.deep.equal(
+        exampleClubs.filter((club) => club.name !== deletedName)
+      );
+    });
 
-  it("should throw invalid parameter error with nonexistent location", () => {
-    const club: Club = { name: "ImagineClub", location: "세미나실 3-2" };
-    expect(clubService.addClub(club)).to.be.rejectedWith(invalidParameterError);
-  });
-
-  it("should throw invalid parameter error with occupied location", () => {
-    const club: Club = { name: "ImagineClub", location: "소개 2실" };
-    expect(clubService.addClub(club)).to.be.rejectedWith(invalidParameterError);
+    it("should throw club not found error", () => {
+      const nonexistentName = "스톤";
+      expect(clubService.deleteClub(nonexistentName)).to.be.rejectedWith(
+        clubNotFoundError
+      );
+    });
   });
 });
