@@ -1,7 +1,7 @@
 import { ILogger, IClubRepository, IClub } from "../interfaces";
 import { Club } from "../models";
 import IClubLocationRepository from "../interfaces/IClubLocationRepository";
-import { invalidParameterError } from "../errors";
+import { clubNotFoundError, invalidParameterError } from "../errors";
 
 export default class ClubService {
   constructor(
@@ -23,5 +23,12 @@ export default class ClubService {
       throw invalidParameterError;
     }
     return this.clubRepository.addClub(club);
+  }
+
+  public async deleteClub(name: string): Promise<void> {
+    if (!(await this.clubRepository.getClubByName(name))) {
+      throw clubNotFoundError;
+    }
+    await this.clubRepository.deleteClubByName(name);
   }
 }
