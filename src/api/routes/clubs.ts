@@ -28,7 +28,6 @@ export default (app: Router) => {
         const clubs = await clubService.getClubs();
         res.status(200).json(clubs);
       } catch (e) {
-        console.log(e);
         next(e);
       }
     }
