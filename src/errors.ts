@@ -23,6 +23,7 @@ const notRefreshTokenError = new HttpError(
   403,
   ""
 );
+const clubNotFoundError = new HttpError("Club not found", 404, "");
 
 export {
   invalidLoginInformationError,
@@ -32,5 +33,6 @@ export {
   notRefreshTokenError,
   expiredTokenError,
   invalidTokenError,
+  clubNotFoundError,
   HttpError,
 };
