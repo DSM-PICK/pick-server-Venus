@@ -32,4 +32,11 @@ export default class FakeClubRepository implements IClubRepository {
       resolve(this.clubs.find((club) => club.name === name));
     });
   }
+
+  public deleteClubByName(name: string): Promise<void> {
+    return new Promise<void>((resolve) => {
+      this.clubs = this.clubs.filter((club) => club.name !== name);
+      resolve();
+    });
+  }
 }

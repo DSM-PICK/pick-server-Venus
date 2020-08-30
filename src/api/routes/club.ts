@@ -2,7 +2,10 @@ import { Request, Response, NextFunction, Router } from "express";
 
 import validate from "../middlewares/paramValidation";
 import isAuth from "../middlewares/tokenVerification";
-import { clubSchema } from "../middlewares/paramValidation/schema";
+import {
+  clubSchema,
+  deleteClubSchema,
+} from "../middlewares/paramValidation/schema";
 import { invalidParameterError } from "../../errors";
 import { IClub } from "../../interfaces";
 import { ClubRepository, ClubLocationRepository } from "../../repositories";
@@ -39,6 +42,28 @@ export default (app: Router) => {
       try {
         const createdClub = await clubService.addClub(club);
         res.status(200).json(createdClub);
+      } catch (e) {
+        next(e);
+      }
+    }
+  );
+
+  route.delete(
+    "/:name",
+    isAuth,
+    async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        await validate({ schema: deleteClubSchema, value: req.params });
+        next();
+      } catch {
+        next(invalidParameterError);
+      }
+    },
+    async (req: Request, res: Response, next: NextFunction) => {
+      const name = req.params.name;
+      try {
+        await clubService.deleteClub(name);
+        res.status(200).json();
       } catch (e) {
         next(e);
       }

@@ -6,4 +6,5 @@ export default interface IClubRepository {
   addClub(club: Club): Promise<Club>;
   getClubByName(name: string): Promise<Club>;
   getClubByLocation(location: string): Promise<Club>;
+  deleteClubByName(name: string): Promise<void>;
 }
