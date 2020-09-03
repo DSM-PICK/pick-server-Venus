@@ -1,6 +1,6 @@
 import { EntityRepository, Repository } from "typeorm";
 import { ClubLocation } from "../models";
-import IClubLocationRepository from "../interfaces/IClubLocationRepository";
+import { IClubLocationRepository } from "../interfaces";
 
 @EntityRepository(ClubLocation)
 export default class ClubLocationRepository extends Repository<ClubLocation>

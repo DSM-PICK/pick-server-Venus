@@ -22,4 +22,8 @@ export default class FakeClubLocationRepository
   public clear(): void {
     this.clubLocations = [];
   }
+
+  public getLocations(): ClubLocation[] {
+    return this.clubLocations;
+  }
 }
