@@ -9,13 +9,14 @@ import { clubNotFoundError, invalidParameterError } from "../errors";
 describe("ClubService", () => {
   const clubRepository = new FakeClubRepository();
   const clubLocationRepository = new FakeClubLocationRepository();
+  clubRepository.setClubLocationRepository(clubLocationRepository);
   const clubService = new ClubService(
     clubRepository,
     clubLocationRepository,
     fakeLogger
   );
 
-  const exmapleClubLocations: ClubLocation[] = [
+  const exampleClubLocations: ClubLocation[] = [
     {
       location: "소개 2실",
       floor: 2,
@@ -39,12 +40,12 @@ describe("ClubService", () => {
   ];
   const exampleClubs: Club[] = [
     {
-      name: "팬텀",
-      location: "소개 2실",
-    },
-    {
       name: "Entry",
       location: "소개 3실",
+    },
+    {
+      name: "팬텀",
+      location: "소개 2실",
     },
     {
       name: "Up",
@@ -54,7 +55,7 @@ describe("ClubService", () => {
 
   beforeEach(async () => {
     let jobs = [];
-    exmapleClubLocations.forEach((clubLocation) =>
+    exampleClubLocations.forEach((clubLocation) =>
       jobs.push(clubLocationRepository.addLocation(clubLocation))
     );
     exampleClubs.forEach((club) => jobs.push(clubRepository.addClub(club)));
@@ -68,17 +69,62 @@ describe("ClubService", () => {
   describe("getClubs()", () => {
     it("should return all club", async () => {
       const clubs = await clubService.getClubs();
-      expect(clubs).to.deep.equal(exampleClubs);
+      const expectedResult = [
+        {
+          name: "Entry",
+          location: "소개 3실",
+          floor: 2,
+          priority: 1,
+        },
+        {
+          name: "Up",
+          location: "보안 2실",
+          floor: 3,
+          priority: 0,
+        },
+        {
+          name: "팬텀",
+          location: "소개 2실",
+          floor: 2,
+          priority: 0,
+        },
+      ];
+      expect(clubs).to.deep.equal(expectedResult);
     });
   });
 
   describe("addClub()", () => {
     it("should add club", async () => {
       const club: Club = { name: "ImagineClub", location: "보안 1실" };
+      const expectedResult = [
+        {
+          floor: 2,
+          location: "소개 3실",
+          name: "Entry",
+          priority: 1,
+        },
+        {
+          floor: 3,
+          location: "보안 1실",
+          name: "ImagineClub",
+          priority: 1,
+        },
+        {
+          floor: 3,
+          location: "보안 2실",
+          name: "Up",
+          priority: 0,
+        },
+        {
+          floor: 2,
+          location: "소개 2실",
+          name: "팬텀",
+          priority: 0,
+        },
+      ];
+
       expect(await clubService.addClub(club)).to.deep.equal(club);
-      expect(await clubService.getClubs()).to.deep.equal(
-        exampleClubs.concat(club)
-      );
+      expect(await clubService.getClubs()).to.deep.equal(expectedResult);
     });
 
     it("should throw invalid parameter error with existing name", () => {
@@ -106,10 +152,23 @@ describe("ClubService", () => {
   describe("deleteClub", () => {
     it("should delete club", async () => {
       const deletedName = "팬텀";
+      const expectedResult = [
+        {
+          floor: 2,
+          location: "소개 3실",
+          name: "Entry",
+          priority: 1,
+        },
+        {
+          floor: 3,
+          location: "보안 2실",
+          name: "Up",
+          priority: 0,
+        },
+      ];
+
       await clubService.deleteClub(deletedName);
-      expect(await clubService.getClubs()).to.deep.equal(
-        exampleClubs.filter((club) => club.name !== deletedName)
-      );
+      expect(await clubService.getClubs()).to.deep.equal(expectedResult);
     });
 
     it("should throw club not found error", () => {

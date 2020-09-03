@@ -1,12 +1,32 @@
-import { IClubRepository } from "../../interfaces";
+import { IClubRepository, IGetClubsResponse } from "../../interfaces";
 import { Club } from "../../models";
+import FakeClubLocationRepository from "./FakeClubLocationRepository";
 
 export default class FakeClubRepository implements IClubRepository {
   private clubs: Club[] = [];
+  private clubLocationRepository: FakeClubLocationRepository;
 
-  public findAll(): Promise<Club[]> {
-    return new Promise<Club[]>((resolve, reject) => {
-      resolve(this.clubs);
+  public setClubLocationRepository(
+    clubLocationRepository: FakeClubLocationRepository
+  ) {
+    this.clubLocationRepository = clubLocationRepository;
+  }
+
+  public findAll(): Promise<IGetClubsResponse[]> {
+    return new Promise<IGetClubsResponse[]>((resolve, reject) => {
+      const clubLocations = this.clubLocationRepository.getLocations();
+      const response: IGetClubsResponse[] = this.clubs.map((club) => {
+        for (let clubLocation of clubLocations) {
+          if (clubLocation.location === club.location) {
+            return {
+              ...club,
+              ...clubLocation,
+            };
+          }
+        }
+      });
+      response.sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
+      resolve(response);
     });
   }
 
