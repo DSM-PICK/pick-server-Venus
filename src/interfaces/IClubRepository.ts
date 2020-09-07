@@ -4,7 +4,8 @@ import IGetClubsResponse from "./IGetClubsResponse";
 export default interface IClubRepository {
   findAll(): Promise<IGetClubsResponse[]>;
   addClub(club: Club): Promise<Club>;
-  getClubByName(name: string): Promise<Club>;
-  getClubByLocation(location: string): Promise<Club>;
+  findClubByName(name: string): Promise<Club>;
+  findClubByLocation(location: string): Promise<Club>;
+  findClubByNameWithLocation(name: string): Promise<IGetClubsResponse>;
   deleteClubByName(name: string): Promise<void>;
 }
