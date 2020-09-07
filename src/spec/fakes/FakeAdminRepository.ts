@@ -1,7 +1,7 @@
 import { IAdminRepository } from "../../interfaces";
 import { Admin } from "../../models";
 
-class FakeAdminRepository implements IAdminRepository {
+export default class FakeAdminRepository implements IAdminRepository {
   private id: string = "admin";
 
   public findOneById(id: string): Promise<Admin> {
@@ -16,5 +16,3 @@ class FakeAdminRepository implements IAdminRepository {
     });
   }
 }
-
-export default FakeAdminRepository;

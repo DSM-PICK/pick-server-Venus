@@ -31,7 +31,7 @@ export default class FakeClubRepository implements IClubRepository {
   }
 
   public addClub(club: Club): Promise<Club> {
-    return new Promise<Club>((resolve, reject) => {
+    return new Promise<Club>((resolve) => {
       this.clubs.push(club);
       resolve(club);
     });
@@ -41,15 +41,27 @@ export default class FakeClubRepository implements IClubRepository {
     this.clubs = [];
   }
 
-  public getClubByLocation(location: string): Promise<Club> {
+  public findClubByLocation(location: string): Promise<Club> {
     return new Promise<Club>((resolve) => {
       resolve(this.clubs.find((club) => club.location === location));
     });
   }
 
-  public getClubByName(name: string): Promise<Club> {
+  public findClubByName(name: string): Promise<Club> {
     return new Promise<Club>((resolve) => {
       resolve(this.clubs.find((club) => club.name === name));
+    });
+  }
+
+  public findClubByNameWithLocation(name: string): Promise<IGetClubsResponse> {
+    return new Promise<IGetClubsResponse>((resolve) => {
+      const locations = this.clubLocationRepository.getLocations();
+      const club = this.clubs.find((c) => c.name === name);
+      for (let location of locations) {
+        if (location.location === club.location) {
+          resolve({ ...club, ...location });
+        }
+      }
     });
   }
 
