@@ -4,7 +4,11 @@ import { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
 
 import verify from "../api/middlewares/tokenVerification/verify";
 import validate from "../api/middlewares/paramValidation";
-import { invalidParameterError, notAccessTokenError } from "../errors";
+import {
+  invalidParameterError,
+  invalidTokenError,
+  notAccessTokenError,
+} from "../errors";
 import { loginSchema } from "../api/middlewares/paramValidation/schema";
 
 describe("Middlewares", () => {
@@ -51,6 +55,18 @@ describe("Middlewares", () => {
         verify({ token: refreshToken, jwtSecret });
       }).to.throw(notAccessTokenError);
     });
+
+    it("should throw invalid token error", () => {
+      expect(function () {
+        verify({ token: null, jwtSecret });
+      }).to.throw(invalidTokenError);
+    });
+
+    it("should throw invalid token error with not bearer", () => {
+      expect(function () {
+        verify({ token: "not bearer token", jwtSecret });
+      }).to.throw(invalidTokenError);
+    });
   });
 
   describe("Validate parameter", () => {
@@ -61,13 +77,13 @@ describe("Middlewares", () => {
       });
     });
 
-    it("should throw invalid parameter error", () => {
-      expect(
+    it("should throw invalid parameter error", async () => {
+      await expect(
         validate({
           schema: loginSchema,
           value: { pw: "example", anyData: 1234 },
         })
-      ).to.rejectedWith(invalidParameterError);
+      ).to.be.rejectedWith(invalidParameterError);
     });
   });
 });

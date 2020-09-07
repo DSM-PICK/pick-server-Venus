@@ -1,62 +1,35 @@
 import { expect } from "chai";
 
 import { ClubService } from "../services";
-import { fakeLogger, FakeClubRepository } from "./fakes";
-import FakeClubLocationRepository from "./fakes/FakeClubLocationRepository";
-import { Club, ClubLocation } from "../models";
+import {
+  fakeLogger,
+  FakeClubRepository,
+  FakeStudentRepository,
+  FakeClubLocationRepository,
+} from "./fakes";
+import { Club } from "../models";
 import { clubNotFoundError, invalidParameterError } from "../errors";
+import { exampleClubLocations, exampleClubs, exampleStudents } from "./samples";
 
 describe("ClubService", () => {
   const clubRepository = new FakeClubRepository();
   const clubLocationRepository = new FakeClubLocationRepository();
+  const studentRepository = new FakeStudentRepository();
   clubRepository.setClubLocationRepository(clubLocationRepository);
   const clubService = new ClubService(
     clubRepository,
     clubLocationRepository,
+    studentRepository,
     fakeLogger
   );
-
-  const exampleClubLocations: ClubLocation[] = [
-    {
-      location: "소개 2실",
-      floor: 2,
-      priority: 0,
-    },
-    {
-      location: "소개 3실",
-      floor: 2,
-      priority: 1,
-    },
-    {
-      location: "보안 2실",
-      floor: 3,
-      priority: 0,
-    },
-    {
-      location: "보안 1실",
-      floor: 3,
-      priority: 1,
-    },
-  ];
-  const exampleClubs: Club[] = [
-    {
-      name: "Entry",
-      location: "소개 3실",
-    },
-    {
-      name: "팬텀",
-      location: "소개 2실",
-    },
-    {
-      name: "Up",
-      location: "보안 2실",
-    },
-  ];
 
   beforeEach(async () => {
     let jobs = [];
     exampleClubLocations.forEach((clubLocation) =>
       jobs.push(clubLocationRepository.addLocation(clubLocation))
+    );
+    exampleStudents.forEach((student) =>
+      jobs.push(studentRepository.addStudent(student))
     );
     exampleClubs.forEach((club) => jobs.push(clubRepository.addClub(club)));
     await Promise.all(jobs);
@@ -64,6 +37,8 @@ describe("ClubService", () => {
 
   afterEach(() => {
     clubRepository.clear();
+    studentRepository.clear();
+    clubLocationRepository.clear();
   });
 
   describe("getClubs()", () => {
@@ -127,29 +102,29 @@ describe("ClubService", () => {
       expect(await clubService.getClubs()).to.deep.equal(expectedResult);
     });
 
-    it("should throw invalid parameter error with existing name", () => {
+    it("should throw invalid parameter error with existing name", async () => {
       const club: Club = { name: "Entry", location: "보안 1실" };
-      expect(clubService.addClub(club)).to.be.rejectedWith(
+      await expect(clubService.addClub(club)).to.be.rejectedWith(
         invalidParameterError
       );
     });
 
-    it("should throw invalid parameter error with nonexistent location", () => {
+    it("should throw invalid parameter error with nonexistent location", async () => {
       const club: Club = { name: "ImagineClub", location: "세미나실 3-2" };
-      expect(clubService.addClub(club)).to.be.rejectedWith(
+      await expect(clubService.addClub(club)).to.be.rejectedWith(
         invalidParameterError
       );
     });
 
-    it("should throw invalid parameter error with occupied location", () => {
+    it("should throw invalid parameter error with occupied location", async () => {
       const club: Club = { name: "ImagineClub", location: "소개 2실" };
-      expect(clubService.addClub(club)).to.be.rejectedWith(
+      await expect(clubService.addClub(club)).to.be.rejectedWith(
         invalidParameterError
       );
     });
   });
 
-  describe("deleteClub", () => {
+  describe("deleteClub()", () => {
     it("should delete club", async () => {
       const deletedName = "팬텀";
       const expectedResult = [
@@ -171,11 +146,44 @@ describe("ClubService", () => {
       expect(await clubService.getClubs()).to.deep.equal(expectedResult);
     });
 
-    it("should throw club not found error", () => {
+    it("should throw club not found error", async () => {
       const nonexistentName = "스톤";
-      expect(clubService.deleteClub(nonexistentName)).to.be.rejectedWith(
+      await expect(clubService.deleteClub(nonexistentName)).to.be.rejectedWith(
         clubNotFoundError
       );
+    });
+  });
+
+  describe("getClubByNameWithStudents()", () => {
+    it("should return expected result", async () => {
+      const clubName = "팬텀";
+      const expectedResult = {
+        club: {
+          name: "팬텀",
+          floor: 2,
+          location: "소개 2실",
+          priority: 0,
+        },
+        students: exampleStudents.filter(
+          (student) => student.club_name === clubName
+        ),
+      };
+
+      const result = await clubService.getClubByNameWithStudents(clubName);
+      expect(result).to.deep.equal(expectedResult);
+    });
+
+    it("should throw club not found error", async () => {
+      const nonexistentClubName = "돌돌";
+      await expect(
+        clubService.getClubByNameWithStudents(nonexistentClubName)
+      ).to.be.rejectedWith(clubNotFoundError);
+    });
+
+    it("should throw invalid parameter error", async () => {
+      await expect(
+        clubService.getClubByNameWithStudents("")
+      ).to.be.rejectedWith(clubNotFoundError);
     });
   });
 });
