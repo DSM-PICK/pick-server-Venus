@@ -11,19 +11,34 @@ export default class ClubRepository extends Repository<Club>
   implements IClubRepository {
   public async findAll(): Promise<IGetClubsResponse[]> {
     const clubs = await this.findAllClubs();
-    return this.formatInResponseFormat(clubs);
+    return ClubRepository.formatGetClubsResponse(clubs);
   }
 
   public addClub(club: Club): Promise<Club> {
     return this.save(club);
   }
 
-  public getClubByLocation(location: string): Promise<Club> {
+  public findClubByLocation(location: string): Promise<Club> {
     return this.findOne({ location });
   }
 
-  public getClubByName(name: string): Promise<Club> {
+  public findClubByName(name: string): Promise<Club> {
     return this.findOne({ name });
+  }
+
+  public async findClubByNameWithLocation(
+    name: string
+  ): Promise<IGetClubsResponse> {
+    return ClubRepository.formatGetClubNameResponse(
+      await this.createQueryBuilder("club")
+        .leftJoinAndSelect(
+          ClubLocation,
+          "clubLocation",
+          "club.location = clubLocation.location"
+        )
+        .where("name = :name", { name })
+        .getRawOne()
+    );
   }
 
   public async deleteClubByName(name: string): Promise<void> {
@@ -41,7 +56,9 @@ export default class ClubRepository extends Repository<Club>
       .getRawMany();
   }
 
-  private formatInResponseFormat(clubs: IClubFromORM[]): IGetClubsResponse[] {
+  private static formatGetClubsResponse(
+    clubs: IClubFromORM[]
+  ): IGetClubsResponse[] {
     return clubs.map((club) => {
       const {
         club_location,
@@ -70,5 +87,36 @@ export default class ClubRepository extends Repository<Club>
       });
       return formatted;
     });
+  }
+
+  private static formatGetClubNameResponse(
+    club: IClubFromORM
+  ): IGetClubsResponse {
+    const {
+      club_location,
+      club_name,
+      clubLocation_floor,
+      clubLocation_priority,
+    } = club;
+    const formatted: IGetClubsResponse = {} as IGetClubsResponse;
+    Object.defineProperties(formatted, {
+      name: {
+        value: club_name,
+        enumerable: true,
+      },
+      location: {
+        value: club_location,
+        enumerable: true,
+      },
+      floor: {
+        value: clubLocation_floor,
+        enumerable: true,
+      },
+      priority: {
+        value: clubLocation_priority,
+        enumerable: true,
+      },
+    });
+    return formatted;
   }
 }
