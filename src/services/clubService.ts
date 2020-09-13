@@ -3,9 +3,9 @@ import {
   IClubRepository,
   IClub,
   IStudentRepository,
+  IClubLocationRepository,
 } from "../interfaces";
 import { Club } from "../models";
-import IClubLocationRepository from "../interfaces/IClubLocationRepository";
 import { clubNotFoundError, invalidParameterError } from "../errors";
 
 export default class ClubService {
