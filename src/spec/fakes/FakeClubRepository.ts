@@ -3,8 +3,16 @@ import { Club } from "../../models";
 import FakeClubLocationRepository from "./FakeClubLocationRepository";
 
 export default class FakeClubRepository implements IClubRepository {
+  private static _default: FakeClubRepository;
   private clubs: Club[] = [];
   private clubLocationRepository: FakeClubLocationRepository;
+
+  public static get default(): FakeClubRepository {
+    if (!FakeClubRepository._default) {
+      FakeClubRepository._default = new FakeClubRepository();
+    }
+    return FakeClubRepository._default;
+  }
 
   public setClubLocationRepository(
     clubLocationRepository: FakeClubLocationRepository

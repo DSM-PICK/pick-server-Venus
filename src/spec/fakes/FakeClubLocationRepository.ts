@@ -1,9 +1,17 @@
-import IClubLocationRepository from "../../interfaces/IClubLocationRepository";
+import IClubLocationRepository from "../../interfaces/club/IClubLocationRepository";
 import { ClubLocation } from "../../models";
 
 export default class FakeClubLocationRepository
   implements IClubLocationRepository {
+  private static _default: FakeClubLocationRepository;
   private clubLocations: ClubLocation[] = [];
+
+  public static get default(): FakeClubLocationRepository {
+    if (!FakeClubLocationRepository._default) {
+      FakeClubLocationRepository._default = new FakeClubLocationRepository();
+    }
+    return FakeClubLocationRepository._default;
+  }
 
   public isNotExistLocation(location: string): Promise<boolean> {
     return new Promise<boolean>((resolve) => {

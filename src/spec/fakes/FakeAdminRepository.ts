@@ -2,7 +2,15 @@ import { IAdminRepository } from "../../interfaces";
 import { Admin } from "../../models";
 
 export default class FakeAdminRepository implements IAdminRepository {
+  private static _default: FakeAdminRepository;
   private id: string = "admin";
+
+  public static get default(): FakeAdminRepository {
+    if (!FakeAdminRepository._default) {
+      FakeAdminRepository._default = new FakeAdminRepository();
+    }
+    return FakeAdminRepository._default;
+  }
 
   public findOneById(id: string): Promise<Admin> {
     if (this.id !== id) {
