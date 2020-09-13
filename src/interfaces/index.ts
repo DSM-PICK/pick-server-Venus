@@ -1,12 +1,12 @@
-import IAdminRepository from "./IAdminRepository";
-import ILogger from "./ILogger";
-import IAdmin from "./IAdmin";
-import IClubRepository from "./IClubRepository";
-import IClub from "./IClub";
-import IClubFromORM from "./IClubFromORM";
-import IClubLocationRepository from "./IClubLocationRepository";
-import IGetClubsResponse from "./IGetClubsResponse";
-import IStudentRepository from "./IStudentRepository";
+import { IAdmin, IAdminRepository } from "./admin";
+import {
+  IClub,
+  IClubFromORM,
+  IClubRepository,
+  IClubLocationRepository,
+} from "./club";
+import { ILogger, IGetClubsResponse, IPatchClubRequest } from "./other";
+import { IStudentRepository } from "./student";
 
 export {
   IAdminRepository,
@@ -18,4 +18,5 @@ export {
   IClubLocationRepository,
   IGetClubsResponse,
   IStudentRepository,
+  IPatchClubRequest,
 };
