@@ -11,36 +11,36 @@ import { Club } from "../models";
 import { clubNotFoundError, invalidParameterError } from "../errors";
 import { exampleClubLocations, exampleClubs, exampleStudents } from "./samples";
 
-describe("ClubService", () => {
-  const clubRepository = new FakeClubRepository();
-  const clubLocationRepository = new FakeClubLocationRepository();
-  const studentRepository = new FakeStudentRepository();
-  clubRepository.setClubLocationRepository(clubLocationRepository);
-  const clubService = new ClubService(
-    clubRepository,
-    clubLocationRepository,
-    studentRepository,
-    fakeLogger
+const clubRepository = FakeClubRepository.default;
+const clubLocationRepository = FakeClubLocationRepository.default;
+const studentRepository = FakeStudentRepository.default;
+clubRepository.setClubLocationRepository(clubLocationRepository);
+const clubService = new ClubService(
+  clubRepository,
+  clubLocationRepository,
+  studentRepository,
+  fakeLogger
+);
+
+beforeEach(async () => {
+  let jobs = [];
+  exampleClubLocations.forEach((clubLocation) =>
+    jobs.push(clubLocationRepository.addLocation(clubLocation))
   );
+  exampleStudents.forEach((student) =>
+    jobs.push(studentRepository.addStudent(student))
+  );
+  exampleClubs.forEach((club) => jobs.push(clubRepository.addClub(club)));
+  await Promise.all(jobs);
+});
 
-  beforeEach(async () => {
-    let jobs = [];
-    exampleClubLocations.forEach((clubLocation) =>
-      jobs.push(clubLocationRepository.addLocation(clubLocation))
-    );
-    exampleStudents.forEach((student) =>
-      jobs.push(studentRepository.addStudent(student))
-    );
-    exampleClubs.forEach((club) => jobs.push(clubRepository.addClub(club)));
-    await Promise.all(jobs);
-  });
+afterEach(() => {
+  clubRepository.clear();
+  studentRepository.clear();
+  clubLocationRepository.clear();
+});
 
-  afterEach(() => {
-    clubRepository.clear();
-    studentRepository.clear();
-    clubLocationRepository.clear();
-  });
-
+describe("ClubService", () => {
   describe("getClubs()", () => {
     it("should return all club", async () => {
       const clubs = await clubService.getClubs();

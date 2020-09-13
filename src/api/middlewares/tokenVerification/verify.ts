@@ -2,17 +2,29 @@ import * as jwt from "jsonwebtoken";
 
 import { invalidTokenError, notAccessTokenError } from "../../../errors";
 
-export default ({ token, jwtSecret }: { token: string; jwtSecret: string }) => {
+function tokenDataTypeCheck(token: string) {
   if (!token || typeof token !== "string") {
     throw invalidTokenError;
   }
-  const splitToken = token.split(" ");
+}
+
+function tokenBearerCheck(splitToken: string[]) {
   if (splitToken[0] !== "Bearer") {
     throw invalidTokenError;
   }
-  const payload: any = jwt.verify(splitToken[1], jwtSecret);
+}
+
+function tokenAccessCheck(payload: any) {
   if (payload.type !== "access") {
     throw notAccessTokenError;
   }
+}
+
+export default ({ token, jwtSecret }: { token: string; jwtSecret: string }) => {
+  tokenDataTypeCheck(token);
+  const splitToken = token.split(" ");
+  tokenBearerCheck(splitToken);
+  const payload: any = jwt.verify(splitToken[1], jwtSecret);
+  tokenAccessCheck(payload);
   return payload;
 };

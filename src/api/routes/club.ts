@@ -1,19 +1,20 @@
-import { Request, Response, NextFunction, Router } from "express";
+import { NextFunction, Request, Response, Router } from "express";
+import { getCustomRepository } from "typeorm";
 
-import validate from "../middlewares/paramValidation";
+import validate, { Property } from "../middlewares/paramValidation";
 import isAuth from "../middlewares/tokenVerification";
 import {
   clubSchema,
   deleteClubSchema,
   getClubNameSchema,
+  patchClubSchema,
 } from "../middlewares/paramValidation/schema";
-import { invalidParameterError } from "../../errors";
-import { IClub } from "../../interfaces";
-import { ClubRepository, ClubLocationRepository } from "../../repositories";
+import { IClub, IPatchClubRequest } from "../../interfaces";
+import { ClubLocationRepository, ClubRepository } from "../../repositories";
 import ClubService from "../../services/clubService";
 import logger from "../../loaders/logger";
-import { getCustomRepository } from "typeorm";
 import StudentRepository from "../../repositories/studentRepository";
+import StudentService from "../../services/studentService";
 
 const route = Router();
 
@@ -29,18 +30,43 @@ export default (app: Router) => {
     studentRepository,
     logger
   );
+  const studentService = new StudentService(studentRepository, clubRepository);
+
+  route.patch(
+    "/students",
+    isAuth,
+    validate({ schema: patchClubSchema, property: Property.BODY }),
+    async (req: Request, res: Response, next: NextFunction) => {
+      const moveInfo: IPatchClubRequest = req.body;
+      const { students_num, to_club_name } = moveInfo;
+      try {
+        await studentService.updateStudentClub(to_club_name, students_num);
+        res.status(200).json();
+      } catch (e) {
+        next(e);
+      }
+    }
+  );
+
+  route.post(
+    "/",
+    isAuth,
+    validate({ schema: clubSchema, property: Property.BODY }),
+    async (req: Request, res: Response, next: NextFunction) => {
+      const club: IClub = req.body;
+      try {
+        const createdClub = await clubService.addClub(club);
+        res.status(200).json(createdClub);
+      } catch (e) {
+        next(e);
+      }
+    }
+  );
 
   route.get(
     "/:name",
     isAuth,
-    async (req: Request, res: Response, next: NextFunction) => {
-      try {
-        await validate({ schema: getClubNameSchema, value: req.params });
-        next();
-      } catch {
-        next(invalidParameterError);
-      }
-    },
+    validate({ schema: getClubNameSchema, property: Property.PARAMS }),
     async (req: Request, res: Response, next: NextFunction) => {
       const { name } = req.params;
       try {
@@ -54,39 +80,10 @@ export default (app: Router) => {
     }
   );
 
-  route.post(
-    "/",
-    isAuth,
-    async (req: Request, res: Response, next: NextFunction) => {
-      try {
-        await validate({ schema: clubSchema, value: req.body });
-        next();
-      } catch {
-        next(invalidParameterError);
-      }
-    },
-    async (req: Request, res: Response, next: NextFunction) => {
-      const club: IClub = req.body;
-      try {
-        const createdClub = await clubService.addClub(club);
-        res.status(200).json(createdClub);
-      } catch (e) {
-        next(e);
-      }
-    }
-  );
-
   route.delete(
     "/:name",
     isAuth,
-    async (req: Request, res: Response, next: NextFunction) => {
-      try {
-        await validate({ schema: deleteClubSchema, value: req.params });
-        next();
-      } catch {
-        next(invalidParameterError);
-      }
-    },
+    validate({ schema: deleteClubSchema, property: Property.PARAMS }),
     async (req: Request, res: Response, next: NextFunction) => {
       const name = req.params.name;
       try {

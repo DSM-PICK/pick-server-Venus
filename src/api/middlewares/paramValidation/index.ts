@@ -1,11 +1,29 @@
 import { Schema } from "joi";
 
 import { invalidParameterError } from "../../../errors";
+import { NextFunction, Request, Response } from "express";
 
-export default async ({ schema, value }: { schema: Schema; value: any }) => {
+const verify = async ({ schema, value }: { schema: Schema; value: any }) => {
+  await schema.validateAsync(value);
+};
+
+export enum Property {
+  BODY = "body",
+  PARAMS = "params",
+  HEADERS = "headers",
+}
+
+export default ({
+  schema,
+  property,
+}: {
+  schema: Schema;
+  property: Property;
+}) => async (req: Request, res: Response, next: NextFunction) => {
   try {
-    await schema.validateAsync(value);
+    await verify({ schema, value: req[property] });
+    next();
   } catch {
-    throw invalidParameterError;
+    next(invalidParameterError);
   }
 };

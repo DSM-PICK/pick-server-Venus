@@ -1,4 +1,4 @@
-import { Router, Request, Response, NextFunction } from "express";
+import { NextFunction, Request, Response, Router } from "express";
 import { getCustomRepository } from "typeorm";
 
 import { IAdmin } from "../../interfaces";
@@ -10,12 +10,8 @@ import {
 } from "../middlewares/paramValidation/schema";
 import config from "../../config";
 import logger from "../../loaders/logger";
-import validate from "../middlewares/paramValidation";
-import {
-  expiredTokenError,
-  invalidParameterError,
-  invalidTokenError,
-} from "../../errors";
+import validate, { Property } from "../middlewares/paramValidation";
+import { expiredTokenError, invalidTokenError } from "../../errors";
 import { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
 
 const route = Router();
@@ -32,14 +28,7 @@ export default (app: Router) => {
 
   route.post(
     "/",
-    async (req: Request, res: Response, next: NextFunction) => {
-      try {
-        await validate({ schema: loginSchema, value: req.body });
-        next();
-      } catch {
-        next(invalidParameterError);
-      }
-    },
+    validate({ schema: loginSchema, property: Property.BODY }),
     async (req: Request, res: Response, next: NextFunction) => {
       const admin: IAdmin = req.body;
       try {
@@ -53,14 +42,7 @@ export default (app: Router) => {
 
   route.patch(
     "/",
-    async (req: Request, res: Response, next: NextFunction) => {
-      try {
-        await validate({ schema: refreshSchema, value: req.headers });
-        next();
-      } catch {
-        next(invalidParameterError);
-      }
-    },
+    validate({ schema: refreshSchema, property: Property.HEADERS }),
     (req: Request, res: Response, next: NextFunction) => {
       const refresh_token = req.get("x-refresh-token");
       try {

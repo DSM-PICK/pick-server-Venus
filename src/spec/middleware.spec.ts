@@ -3,13 +3,7 @@ import { expect } from "chai";
 import { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
 
 import verify from "../api/middlewares/tokenVerification/verify";
-import validate from "../api/middlewares/paramValidation";
-import {
-  invalidParameterError,
-  invalidTokenError,
-  notAccessTokenError,
-} from "../errors";
-import { loginSchema } from "../api/middlewares/paramValidation/schema";
+import { invalidTokenError, notAccessTokenError } from "../errors";
 
 describe("Middlewares", () => {
   describe("verify token", () => {
@@ -66,24 +60,6 @@ describe("Middlewares", () => {
       expect(function () {
         verify({ token: "not bearer token", jwtSecret });
       }).to.throw(invalidTokenError);
-    });
-  });
-
-  describe("Validate parameter", () => {
-    it("should pass without any error", async () => {
-      await validate({
-        schema: loginSchema,
-        value: { id: "example", pw: "example", anyData: 1234 },
-      });
-    });
-
-    it("should throw invalid parameter error", async () => {
-      await expect(
-        validate({
-          schema: loginSchema,
-          value: { pw: "example", anyData: 1234 },
-        })
-      ).to.be.rejectedWith(invalidParameterError);
     });
   });
 });

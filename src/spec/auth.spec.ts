@@ -19,7 +19,7 @@ describe("AuthService", () => {
   const jwtSecret = "venus_test";
   let stub;
   const authService = new AuthService(
-    new FakeAdminRepository(),
+    FakeAdminRepository.default,
     fakeLogger,
     jwtSecret
   );
