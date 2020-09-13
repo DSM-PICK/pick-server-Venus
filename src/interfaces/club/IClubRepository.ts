@@ -1,5 +1,5 @@
-import { Club } from "../models";
-import IGetClubsResponse from "./IGetClubsResponse";
+import { Club } from "../../models";
+import IGetClubsResponse from "../other/IGetClubsResponse";
 
 export default interface IClubRepository {
   findAll(): Promise<IGetClubsResponse[]>;
