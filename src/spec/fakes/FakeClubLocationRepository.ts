@@ -1,5 +1,6 @@
 import IClubLocationRepository from "../../interfaces/club/IClubLocationRepository";
 import { ClubLocation } from "../../models";
+import FakeClubRepository from "./FakeClubRepository";
 
 export default class FakeClubLocationRepository
   implements IClubLocationRepository {
@@ -21,6 +22,15 @@ export default class FakeClubLocationRepository
         )
       );
     });
+  }
+
+  public async findAll(): Promise<ClubLocation[]> {
+    const clubs = await FakeClubRepository.default.findAll();
+    return this.clubLocations.filter(
+      (clubLocation) =>
+        clubs.findIndex((club) => club.location === clubLocation.location) ===
+        -1
+    );
   }
 
   public addLocation(location: ClubLocation): void {
