@@ -59,21 +59,40 @@ export default class ClubRepository extends Repository<Club>
   private static formatGetClubsResponse(
     clubs: IClubFromORM[]
   ): IGetClubsResponse[] {
-    return clubs.map((club) => {
-      const {
-        club_location,
-        club_name,
-        clubLocation_floor,
-        clubLocation_priority,
-      } = club;
-      const formatted: IGetClubsResponse = {} as IGetClubsResponse;
-      Object.defineProperties(formatted, {
+    return clubs.map((club) => this.defineGetClubsResponseFormat(club));
+  }
+
+  private static formatGetClubNameResponse(
+    club: IClubFromORM
+  ): IGetClubsResponse {
+    return this.defineGetClubsResponseFormat(club);
+  }
+
+  private static defineGetClubsResponseFormat({
+    club_club_head,
+    club_teacher,
+    club_location,
+    club_name,
+    clubLocation_floor,
+    clubLocation_priority,
+  }: IClubFromORM) {
+    return Object.defineProperties(
+      {},
+      {
         name: {
           value: club_name,
           enumerable: true,
         },
         location: {
           value: club_location,
+          enumerable: true,
+        },
+        teacher: {
+          value: club_teacher,
+          enumerable: true,
+        },
+        club_head: {
+          value: club_club_head,
           enumerable: true,
         },
         floor: {
@@ -84,39 +103,7 @@ export default class ClubRepository extends Repository<Club>
           value: clubLocation_priority,
           enumerable: true,
         },
-      });
-      return formatted;
-    });
-  }
-
-  private static formatGetClubNameResponse(
-    club: IClubFromORM
-  ): IGetClubsResponse {
-    const {
-      club_location,
-      club_name,
-      clubLocation_floor,
-      clubLocation_priority,
-    } = club;
-    const formatted: IGetClubsResponse = {} as IGetClubsResponse;
-    Object.defineProperties(formatted, {
-      name: {
-        value: club_name,
-        enumerable: true,
-      },
-      location: {
-        value: club_location,
-        enumerable: true,
-      },
-      floor: {
-        value: clubLocation_floor,
-        enumerable: true,
-      },
-      priority: {
-        value: clubLocation_priority,
-        enumerable: true,
-      },
-    });
-    return formatted;
+      }
+    );
   }
 }
