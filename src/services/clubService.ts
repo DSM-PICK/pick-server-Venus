@@ -4,6 +4,7 @@ import {
   IClub,
   IStudentRepository,
   IClubLocationRepository,
+  IGetClubsResponse,
 } from "../interfaces";
 import { Club } from "../models";
 import { clubNotFoundError, invalidParameterError } from "../errors";
@@ -16,7 +17,7 @@ export default class ClubService {
     private logger: ILogger
   ) {}
 
-  public getClubs(): Promise<Club[]> {
+  public getClubs(): Promise<IGetClubsResponse[]> {
     return this.clubRepository.findAll();
   }
 
@@ -51,4 +52,6 @@ export default class ClubService {
     }
     await this.clubRepository.deleteClubByName(clubName);
   }
+
+  public async updateClubInformation() {}
 }
