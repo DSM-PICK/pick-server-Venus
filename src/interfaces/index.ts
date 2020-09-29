@@ -4,6 +4,7 @@ import {
   IClubFromORM,
   IClubRepository,
   IClubLocationRepository,
+  IUpdateClub,
 } from "./club";
 import { ILogger, IGetClubsResponse, IPatchClubRequest } from "./other";
 import { IStudentRepository } from "./student";
@@ -19,4 +20,5 @@ export {
   IGetClubsResponse,
   IStudentRepository,
   IPatchClubRequest,
+  IUpdateClub,
 };
