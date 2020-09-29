@@ -7,4 +7,10 @@ export class Club {
 
   @Column({ length: 20, unique: true, nullable: true })
   location: string;
+
+  @Column({ length: 10 })
+  teacher: string;
+
+  @Column({ length: 12 })
+  club_head: string;
 }

@@ -5,6 +5,8 @@ import clubSchema from "./clubSchema";
 import deleteClubSchema from "./deleteClubSchema";
 import getClubNameSchema from "./getClubNameSchema";
 import patchClubSchema from "./patchClubSchema";
+import updateClubParamSchema from "./updateClubParamSchema";
+import updateClubBodySchema from "./updateClubBodySchema";
 
 export {
   loginSchema,
@@ -14,4 +16,6 @@ export {
   deleteClubSchema,
   getClubNameSchema,
   patchClubSchema,
+  updateClubParamSchema,
+  updateClubBodySchema,
 };

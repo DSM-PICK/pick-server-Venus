@@ -4,9 +4,16 @@ import {
   IClub,
   IStudentRepository,
   IClubLocationRepository,
+  IGetClubsResponse,
+  IUpdateClub,
 } from "../interfaces";
 import { Club } from "../models";
-import { clubNotFoundError, invalidParameterError } from "../errors";
+import {
+  clubLocationNotFoundError,
+  clubNotFoundError,
+  invalidParameterError,
+  locationAlreadyAssignedError,
+} from "../errors";
 
 export default class ClubService {
   constructor(
@@ -16,7 +23,7 @@ export default class ClubService {
     private logger: ILogger
   ) {}
 
-  public getClubs(): Promise<Club[]> {
+  public getClubs(): Promise<IGetClubsResponse[]> {
     return this.clubRepository.findAll();
   }
 
@@ -50,5 +57,31 @@ export default class ClubService {
       throw clubNotFoundError;
     }
     await this.clubRepository.deleteClubByName(clubName);
+  }
+
+  public async updateClubInformation(clubName: string, club: IUpdateClub) {
+    if (!(await this.clubRepository.findClubByName(clubName))) {
+      throw clubNotFoundError;
+    }
+    const existentInfo = {};
+    let existentInfoCount = 0;
+    for (let infoWillChange in club) {
+      if (club.hasOwnProperty(infoWillChange) && club[infoWillChange]) {
+        existentInfoCount++;
+        existentInfo[infoWillChange] = club[infoWillChange];
+      }
+    }
+    if (!existentInfoCount) {
+      throw invalidParameterError;
+    }
+    if (club.location) {
+      if (await this.clubLocationRepository.isNotExistLocation(club.location)) {
+        throw clubLocationNotFoundError;
+      }
+      if (await this.clubRepository.isAssignedLocation(club.location)) {
+        throw locationAlreadyAssignedError;
+      }
+    }
+    await this.clubRepository.updateClub(clubName, existentInfo);
   }
 }

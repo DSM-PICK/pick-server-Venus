@@ -20,10 +20,7 @@ export default class AuthService {
   ): Promise<{ access_token: string; refresh_token: string }> {
     const adminRecord = await this.adminRepository.findOneById(adminDTO.id);
 
-    if (
-      adminRecord === null ||
-      this.isInvalidPassword(adminRecord.pw, adminDTO.pw)
-    ) {
+    if (!adminRecord || this.isInvalidPassword(adminRecord.pw, adminDTO.pw)) {
       throw invalidLoginInformationError;
     }
 

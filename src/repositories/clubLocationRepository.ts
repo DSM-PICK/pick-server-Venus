@@ -14,7 +14,6 @@ export default class ClubLocationRepository extends Repository<ClubLocation>
     const assignedLocations = (
       await this.createQueryBuilder("clubLocation")
         .innerJoin(Club, "club", "club.location = clubLocation.location")
-        .printSql()
         .getMany()
     ).map((location) => location.location);
 
