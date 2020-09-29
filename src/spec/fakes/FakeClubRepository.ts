@@ -1,4 +1,9 @@
-import { IClubRepository, IGetClubsResponse } from "../../interfaces";
+import {
+  IClub,
+  IClubRepository,
+  IGetClubsResponse,
+  IUpdateClub,
+} from "../../interfaces";
 import { Club } from "../../models";
 import FakeClubLocationRepository from "./FakeClubLocationRepository";
 
@@ -77,6 +82,24 @@ export default class FakeClubRepository implements IClubRepository {
     return new Promise<void>((resolve) => {
       this.clubs = this.clubs.filter((club) => club.name !== name);
       resolve();
+    });
+  }
+
+  public updateClub(clubName: string, club: IUpdateClub): Promise<void> {
+    return new Promise<void>((resolve) => {
+      const idx = this.clubs.findIndex((club) => club.name === clubName);
+      this.clubs[idx] = { ...this.clubs[idx], ...club };
+      resolve();
+    });
+  }
+
+  public isAssignedLocation(location: string): Promise<boolean> {
+    return new Promise<boolean>((resolve) => {
+      resolve(
+        Boolean(
+          this.clubs.findIndex((club) => club.location === location) !== -1
+        )
+      );
     });
   }
 }

@@ -24,6 +24,16 @@ const notRefreshTokenError = new HttpError(
   ""
 );
 const clubNotFoundError = new HttpError("Club not found", 404, "");
+const clubLocationNotFoundError = new HttpError(
+  "Club location not found",
+  404,
+  ""
+);
+const locationAlreadyAssignedError = new HttpError(
+  "Location is already assigned",
+  409,
+  ""
+);
 
 export {
   invalidLoginInformationError,
@@ -35,4 +45,6 @@ export {
   invalidTokenError,
   clubNotFoundError,
   HttpError,
+  clubLocationNotFoundError,
+  locationAlreadyAssignedError,
 };
