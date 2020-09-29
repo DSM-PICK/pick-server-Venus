@@ -1,9 +1,11 @@
 import { EntityRepository, Repository } from "typeorm";
 import { Club, ClubLocation } from "../models";
 import {
+  IClub,
   IClubFromORM,
   IClubRepository,
   IGetClubsResponse,
+  IUpdateClub,
 } from "../interfaces";
 
 @EntityRepository(Club)
@@ -43,6 +45,14 @@ export default class ClubRepository extends Repository<Club>
 
   public async deleteClubByName(name: string): Promise<void> {
     await this.delete({ name });
+  }
+
+  public async updateClub(clubName: string, club: IUpdateClub): Promise<void> {
+    await this.update({ name: clubName }, { ...club });
+  }
+
+  public async isAssignedLocation(location: string): Promise<boolean> {
+    return Boolean(await this.findOne({ location }));
   }
 
   private findAllClubs(): Promise<IClubFromORM[]> {
