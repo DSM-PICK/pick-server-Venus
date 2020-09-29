@@ -8,8 +8,14 @@ import {
   FakeClubLocationRepository,
 } from "./fakes";
 import { Club } from "../models";
-import { clubNotFoundError, invalidParameterError } from "../errors";
+import {
+  clubLocationNotFoundError,
+  clubNotFoundError,
+  invalidParameterError,
+  locationAlreadyAssignedError,
+} from "../errors";
 import { exampleClubLocations, exampleClubs, exampleStudents } from "./samples";
+import { IClub } from "../interfaces";
 
 const clubRepository = FakeClubRepository.default;
 const clubLocationRepository = FakeClubLocationRepository.default;
@@ -210,7 +216,6 @@ describe("ClubService", () => {
       };
 
       const result = await clubService.getClubByNameWithStudents(clubName);
-      console.log(result);
       expect(result).to.deep.equal(expectedResult);
     });
 
@@ -225,6 +230,87 @@ describe("ClubService", () => {
       await expect(
         clubService.getClubByNameWithStudents("")
       ).to.be.rejectedWith(clubNotFoundError);
+    });
+  });
+
+  describe("updateClubInformation()", () => {
+    it("should update club information", async () => {
+      const clubName = "Up";
+      const clubInformation = {
+        name: "Down",
+        club_head: "짱구",
+      } as IClub;
+
+      await clubService.updateClubInformation(clubName, clubInformation);
+
+      const updatedInformation = await clubService.getClubByNameWithStudents(
+        clubInformation.name
+      );
+      delete updatedInformation.students;
+      expect(updatedInformation.club).to.deep.equal({
+        floor: 3,
+        location: "보안 2실",
+        teacher: "나미리",
+        club_head: "짱구",
+        name: "Down",
+        priority: 0,
+      });
+    });
+
+    it("should update club location", async () => {
+      const clubName = "Up";
+      const clubInformation = { location: "보안 1실" };
+
+      await clubService.updateClubInformation(clubName, clubInformation);
+
+      const updatedInformation = await clubService.getClubByNameWithStudents(
+        clubName
+      );
+      delete updatedInformation.students;
+      expect(updatedInformation.club).to.deep.equal({
+        floor: 3,
+        location: "보안 1실",
+        teacher: "나미리",
+        club_head: "치타",
+        name: "Up",
+        priority: 1,
+      });
+    });
+
+    it("should throw invalid parameter error with empty object", async () => {
+      const clubName = "Up";
+      const clubInformation = {};
+
+      await expect(
+        clubService.updateClubInformation(clubName, clubInformation)
+      ).to.be.rejectedWith(invalidParameterError);
+    });
+
+    it("should throw club not found error with nonexistent club name", async () => {
+      const clubName = "nonexistence";
+      const clubInformation = { name: "existence" };
+
+      await expect(
+        clubService.updateClubInformation(clubName, clubInformation)
+      ).to.be.rejectedWith(clubNotFoundError);
+    });
+
+    it("should throw club location not found error with nonexistent club location", async () => {
+      const clubName = "Up";
+      const clubInformation = { location: "소개 100실" };
+
+      await expect(
+        clubService.updateClubInformation(clubName, clubInformation)
+      ).to.be.rejectedWith(clubLocationNotFoundError);
+    });
+
+    it("should throw location already assigned error", async () => {
+      const clubName = "Up";
+      const clubInformation = { location: "소개 2실" };
+
+      await expect(
+        clubService.updateClubInformation(clubName, clubInformation)
+      ).to.be.rejectedWith(locationAlreadyAssignedError);
     });
   });
 });
