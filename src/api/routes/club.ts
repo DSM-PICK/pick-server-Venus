@@ -8,8 +8,10 @@ import {
   deleteClubSchema,
   getClubNameSchema,
   patchClubSchema,
+  updateClubBodySchema,
+  updateClubParamSchema,
 } from "../middlewares/paramValidation/schema";
-import { IClub, IPatchClubRequest } from "../../interfaces";
+import { IClub, IPatchClubRequest, IUpdateClub } from "../../interfaces";
 import { ClubLocationRepository, ClubRepository } from "../../repositories";
 import ClubService from "../../services/clubService";
 import logger from "../../loaders/logger";
@@ -85,9 +87,26 @@ export default (app: Router) => {
     isAuth,
     validate({ schema: deleteClubSchema, property: Property.PARAMS }),
     async (req: Request, res: Response, next: NextFunction) => {
-      const name = req.params.name;
+      const { name } = req.params;
       try {
         await clubService.deleteClub(name);
+        res.status(200).json();
+      } catch (e) {
+        next(e);
+      }
+    }
+  );
+
+  route.patch(
+    "/:name",
+    isAuth,
+    validate({ schema: updateClubParamSchema, property: Property.PARAMS }),
+    validate({ schema: updateClubBodySchema, property: Property.BODY }),
+    async (req: Request, res: Response, next: NextFunction) => {
+      const { name } = req.params;
+      const clubInfoWillChange: IUpdateClub = req.body;
+      try {
+        await clubService.updateClubInformation(name, clubInfoWillChange);
         res.status(200).json();
       } catch (e) {
         next(e);
