@@ -10,7 +10,7 @@ export default ({ app }: { app: express.Application }) => {
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
 
-  app.use("/admin", route());
+  app.use("/venus", route());
 
   app.use((req, res, next) => {
     next(apiNotFoundError);
