@@ -38,13 +38,13 @@ export default class FakeStudentRepository implements IStudentRepository {
     });
   }
 
-  public findStudentsByNumAndName(numAndName: string): Promise<Student[]> {
+  public findStudentsByNumAndName(num_and_name: string): Promise<Student[]> {
     return new Promise<Student[]>((resolve) => {
       resolve(
         this.students.filter((student) => {
           const { num, name } = student;
           const numName = num + " " + name;
-          return numName.split(numAndName).length !== 1;
+          return numName.split(num_and_name).length !== 1;
         })
       );
     });

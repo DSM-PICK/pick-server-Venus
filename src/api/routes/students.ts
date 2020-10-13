@@ -21,10 +21,10 @@ export default (app: Router) => {
     isAuth,
     validate({ schema: getStudentSearchSchema, property: Property.QUERY }),
     async (req: Request, res: Response, next: NextFunction) => {
-      const { numAndName } = req.query;
+      const { num_and_name } = req.query;
       try {
         const searchResult = await studentService.getStudentsByNumAndName(
-          numAndName as string
+          num_and_name as string
         );
         res.status(200).json(searchResult);
       } catch (e) {
