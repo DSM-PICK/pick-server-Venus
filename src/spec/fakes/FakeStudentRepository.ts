@@ -38,6 +38,18 @@ export default class FakeStudentRepository implements IStudentRepository {
     });
   }
 
+  public findStudentsByNumAndName(numAndName: string): Promise<Student[]> {
+    return new Promise<Student[]>((resolve) => {
+      resolve(
+        this.students.filter((student) => {
+          const { num, name } = student;
+          const numName = num + " " + name;
+          return numName.split(numAndName).length !== 1;
+        })
+      );
+    });
+  }
+
   public addStudent(student: Student): void {
     this.students.push(student);
   }

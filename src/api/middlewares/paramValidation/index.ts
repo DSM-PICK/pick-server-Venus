@@ -11,6 +11,7 @@ export enum Property {
   BODY = "body",
   PARAMS = "params",
   HEADERS = "headers",
+  QUERY = "query",
 }
 
 export default ({
