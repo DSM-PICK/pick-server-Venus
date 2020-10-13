@@ -27,4 +27,12 @@ export default class StudentRepository extends Repository<Student>
       .where("num IN (:num)", { num: studentsNum })
       .execute();
   }
+
+  public findStudentsByNumAndName(numAndName: string): Promise<Student[]> {
+    return this.createQueryBuilder()
+      .select()
+      .from(Student, "student")
+      .where("CONCAT(num, ' ', name) LIKE '%:numAndName%'", { numAndName })
+      .getMany();
+  }
 }
