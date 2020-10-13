@@ -61,4 +61,28 @@ describe("StudentService", () => {
       ).to.be.rejectedWith(clubNotFoundError);
     });
   });
+
+  describe("getStudentsByNumAndName()", () => {
+    it("should return expected search result", async () => {
+      const numAndName = "12";
+      const searchResult = await studentService.getStudentsByNumAndName(
+        numAndName
+      );
+
+      expect(searchResult).to.deep.equal([
+        {
+          name: "이이이",
+          club_name: "Entry",
+          class_name: null,
+          num: "1201",
+        },
+        {
+          name: "박박박",
+          club_name: "팬텀",
+          class_name: null,
+          num: "1202",
+        },
+      ]);
+    });
+  });
 });
