@@ -1,5 +1,6 @@
 import { IClubRepository, IStudentRepository } from "../interfaces";
 import { clubNotFoundError } from "../errors";
+import { Student } from "../models";
 
 export default class StudentService {
   constructor(
@@ -15,5 +16,9 @@ export default class StudentService {
       throw clubNotFoundError;
     }
     await this.studentRepository.updateStudentClub(toClubName, studentsNum);
+  }
+
+  public getStudentsByNumAndName(numAndName: string): Promise<Student[]> {
+    return this.studentRepository.findStudentsByNumAndName(numAndName);
   }
 }
