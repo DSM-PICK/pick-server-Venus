@@ -6,4 +6,8 @@ export default class LocationService {
   public getLocations() {
     return this.clubLocationRepository.findAll();
   }
+
+  public getLocationsByLocation(location: string) {
+    return this.clubLocationRepository.findAllByLocation(location);
+  }
 }
