@@ -8,6 +8,7 @@ import patchClubSchema from "./patchClubSchema";
 import updateClubParamSchema from "./updateClubParamSchema";
 import updateClubBodySchema from "./updateClubBodySchema";
 import getStudentSearchSchema from "./getStudentSearchSchema";
+import getLocationsSearchSchema from "./getLocationsSearchSchema";
 
 export {
   loginSchema,
@@ -20,4 +21,5 @@ export {
   updateClubParamSchema,
   updateClubBodySchema,
   getStudentSearchSchema,
+  getLocationsSearchSchema,
 };

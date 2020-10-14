@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { auth, clubs, club, locations } from "./routes";
+import { auth, clubs, club, locations, students } from "./routes";
 import logger from "../loaders/logger";
 
 export default () => {
@@ -21,6 +21,7 @@ export default () => {
   clubs(app);
   club(app);
   locations(app);
+  students(app);
 
   return app;
 };
