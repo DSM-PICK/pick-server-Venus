@@ -33,6 +33,16 @@ export default class FakeClubLocationRepository
     );
   }
 
+  public findAllByLocation(location: string): Promise<ClubLocation[]> {
+    return new Promise<ClubLocation[]>((resolve) => {
+      resolve(
+        this.clubLocations.filter((clubLocation) => {
+          return clubLocation.location.split(location).length !== 1;
+        })
+      );
+    });
+  }
+
   public addLocation(location: ClubLocation): void {
     this.clubLocations.push(location);
   }
