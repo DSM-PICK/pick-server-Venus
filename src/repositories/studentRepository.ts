@@ -30,9 +30,9 @@ export default class StudentRepository extends Repository<Student>
 
   public findStudentsByNumAndName(numAndName: string): Promise<Student[]> {
     return this.createQueryBuilder()
-      .select()
-      .from(Student, "student")
-      .where("CONCAT(num, ' ', name) LIKE '%:numAndName%'", { numAndName })
+      .where("CONCAT(num, ' ', name) LIKE :numAndName", {
+        numAndName: `%${numAndName}%`,
+      })
       .getMany();
   }
 }
