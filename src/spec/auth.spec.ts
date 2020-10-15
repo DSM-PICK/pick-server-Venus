@@ -46,7 +46,7 @@ describe("AuthService", () => {
         })
         .returns("access_token")
         .withArgs({ id: "admin", type: "refresh" }, jwtSecret, {
-          expiresIn: "14d",
+          expiresIn: "7d",
         })
         .returns("refresh_token");
 
