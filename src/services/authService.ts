@@ -59,7 +59,7 @@ export default class AuthService {
 
   private generateToken({ id, type }: { id: string; type: string }) {
     return jwt.sign({ id, type }, this.jwtSecret, {
-      expiresIn: type === "access" ? "30m" : type === "refresh" ? "14d" : 0,
+      expiresIn: type === "access" ? "30m" : type === "refresh" ? "7d" : 0,
     });
   }
 
