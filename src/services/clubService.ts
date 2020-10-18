@@ -84,4 +84,12 @@ export default class ClubService {
     }
     await this.clubRepository.updateClub(clubName, existentInfo);
   }
+
+  public async getClubByName(name: string) {
+    const club = await this.clubRepository.findClubByName(name);
+    if (!club) {
+      throw clubNotFoundError;
+    }
+    return club;
+  }
 }
