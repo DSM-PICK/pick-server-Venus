@@ -15,15 +15,9 @@ export default class StudentRepository extends Repository<Student>
     toClubName: string,
     studentsNum: string[]
   ): Promise<void> {
-    const club = await this.createQueryBuilder()
-      .where("club.name = :clubName", { clubName: toClubName })
-      .getOne();
-    if (!club) {
-      throw clubNotFoundError;
-    }
     await this.createQueryBuilder()
       .update(Student)
-      .set({ class_name: toClubName })
+      .set({ club_name: toClubName })
       .where("num IN (:num)", { num: studentsNum })
       .execute();
   }
@@ -33,6 +27,12 @@ export default class StudentRepository extends Repository<Student>
       .where("CONCAT(num, ' ', name) LIKE :numAndName", {
         numAndName: `%${numAndName}%`,
       })
+      .getMany();
+  }
+
+  public findStudentsByNums(nums: string[]): Promise<Student[]> {
+    return this.createQueryBuilder()
+      .where("num IN (:nums)", { nums })
       .getMany();
   }
 }
