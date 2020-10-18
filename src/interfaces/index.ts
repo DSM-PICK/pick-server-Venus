@@ -8,6 +8,7 @@ import {
 } from "./club";
 import { ILogger, IGetClubsResponse, IPatchClubRequest } from "./other";
 import { IStudentRepository } from "./student";
+import { INoticeRepository } from "./notice";
 
 export {
   IAdminRepository,
@@ -21,4 +22,5 @@ export {
   IStudentRepository,
   IPatchClubRequest,
   IUpdateClub,
+  INoticeRepository,
 };
