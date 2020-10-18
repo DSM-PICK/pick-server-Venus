@@ -12,11 +12,21 @@ import {
   updateClubParamSchema,
 } from "../middlewares/paramValidation/schema";
 import { IClub, IPatchClubRequest, IUpdateClub } from "../../interfaces";
-import { ClubLocationRepository, ClubRepository } from "../../repositories";
+import {
+  ClubLocationRepository,
+  ClubRepository,
+  NoticeRepository,
+} from "../../repositories";
 import ClubService from "../../services/clubService";
 import logger from "../../loaders/logger";
 import StudentRepository from "../../repositories/studentRepository";
 import StudentService from "../../services/studentService";
+import getNoticeEventEvmitter, {
+  clubAdd,
+  clubDelete,
+  studentClubChange,
+} from "../../loaders/noticeEventEvmitter";
+import { club } from "./index";
 
 const route = Router();
 
@@ -26,6 +36,7 @@ export default (app: Router) => {
   const clubRepository = getCustomRepository(ClubRepository);
   const clubLocationRepository = getCustomRepository(ClubLocationRepository);
   const studentRepository = getCustomRepository(StudentRepository);
+  const noticeRepository = getCustomRepository(NoticeRepository);
   const clubService = new ClubService(
     clubRepository,
     clubLocationRepository,
@@ -33,6 +44,7 @@ export default (app: Router) => {
     logger
   );
   const studentService = new StudentService(studentRepository, clubRepository);
+  const noticeEventEmitter = getNoticeEventEvmitter(noticeRepository);
 
   route.patch(
     "/students",
@@ -42,9 +54,29 @@ export default (app: Router) => {
       const moveInfo: IPatchClubRequest = req.body;
       const { students_num, to_club_name } = moveInfo;
       try {
+        const students = await studentService.getStudentsByNums(students_num);
         await studentService.updateStudentClub(to_club_name, students_num);
+        const clubAndName = {};
+        for (let student of students) {
+          const { club_name, name } = student;
+          if (!clubAndName[club_name]) {
+            clubAndName[club_name] = [];
+          }
+          clubAndName[club_name].push(name);
+        }
+        const { id } = res.locals.payload;
+        for (let clubName in clubAndName) {
+          noticeEventEmitter.emit(
+            studentClubChange,
+            clubName,
+            to_club_name,
+            clubAndName[clubName],
+            id
+          );
+        }
         res.status(200).json();
       } catch (e) {
+        console.log(e);
         next(e);
       }
     }
@@ -58,6 +90,9 @@ export default (app: Router) => {
       const club: IClub = req.body;
       try {
         const createdClub = await clubService.addClub(club);
+        const { name, location } = club;
+        const { id } = res.locals.payload;
+        noticeEventEmitter.emit(clubAdd, name, location, id);
         res.status(200).json(createdClub);
       } catch (e) {
         next(e);
@@ -89,7 +124,10 @@ export default (app: Router) => {
     async (req: Request, res: Response, next: NextFunction) => {
       const { name } = req.params;
       try {
+        const { location } = await clubService.getClubByName(name);
         await clubService.deleteClub(name);
+        const { id } = res.locals.payload;
+        noticeEventEmitter.emit(clubDelete, name, location, id);
         res.status(200).json();
       } catch (e) {
         next(e);
