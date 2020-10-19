@@ -313,4 +313,27 @@ describe("ClubService", () => {
       ).to.be.rejectedWith(locationAlreadyAssignedError);
     });
   });
+
+  describe("getClubByName()", () => {
+    it("should return expected club information", async () => {
+      const clubName = "Up";
+
+      const club = await clubService.getClubByName(clubName);
+
+      expect(club).to.deep.equal({
+        name: "Up",
+        location: "보안 2실",
+        teacher: "나미리",
+        club_head: "치타",
+      });
+    });
+
+    it("should throw club not found error with nonexistent club name", async () => {
+      const clubName = "xxxx";
+
+      await expect(clubService.getClubByName(clubName)).to.be.rejectedWith(
+        clubNotFoundError
+      );
+    });
+  });
 });

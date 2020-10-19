@@ -18,6 +18,10 @@ export default class StudentService {
     await this.studentRepository.updateStudentClub(toClubName, studentsNum);
   }
 
+  public getStudentsByNums(nums: string[]) {
+    return this.studentRepository.findStudentsByNums(nums);
+  }
+
   public getStudentsByNumAndName(numAndName: string): Promise<Student[]> {
     return this.studentRepository.findStudentsByNumAndName(numAndName);
   }
