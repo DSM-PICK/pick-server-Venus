@@ -50,6 +50,16 @@ export default class FakeStudentRepository implements IStudentRepository {
     });
   }
 
+  public findStudentsByNums(nums: string[]): Promise<Student[]> {
+    return new Promise<Student[]>((resolve) => {
+      resolve(
+        this.students.filter((student) => {
+          return nums.findIndex((num) => num === student.num) !== -1;
+        })
+      );
+    });
+  }
+
   public addStudent(student: Student): void {
     this.students.push(student);
   }

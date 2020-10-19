@@ -85,4 +85,33 @@ describe("StudentService", () => {
       ]);
     });
   });
+
+  describe("getStudentsByNums()", () => {
+    it("should return expected students data with nums", async () => {
+      const nums = ["1101", "1301", "2304"];
+
+      const students = await studentService.getStudentsByNums(nums);
+
+      expect(students).to.deep.equal([
+        {
+          name: "김김김",
+          club_name: "팬텀",
+          class_name: null,
+          num: "1101",
+        },
+        {
+          name: "최최최",
+          club_name: "팬텀",
+          class_name: null,
+          num: "1301",
+        },
+        {
+          name: "진진진",
+          club_name: "Entry",
+          class_name: null,
+          num: "2304",
+        },
+      ]);
+    });
+  });
 });
