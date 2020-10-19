@@ -1,13 +1,14 @@
 import { EventEmitter } from "events";
 
-import { INoticeRepository } from "../interfaces";
+import { INoticeRepository, IUpdateClub } from "../interfaces";
+import { Club } from "../models";
 
 const eventEmitter = new EventEmitter();
 
 export const studentClubChange = Symbol("studentClubChange");
 export const clubDelete = Symbol("clubDelete");
 export const clubAdd = Symbol("clubAdd");
-export const clubLocationChange = Symbol("clubLocationChange");
+export const clubInfoChange = Symbol("clubInfoChange");
 
 export default (noticeRepository: INoticeRepository) => {
   eventEmitter.on(
@@ -44,12 +45,12 @@ export default (noticeRepository: INoticeRepository) => {
   );
 
   eventEmitter.on(
-    clubLocationChange,
-    async (club: string, from: string, to: string, adminId: string) => {
-      await noticeRepository.addNotice(
+    clubInfoChange,
+    async (beforeClub: Club, afterClub: IUpdateClub, adminId: string) => {
+      await noticeRepository.addNoticeWhenClubInfoChange(
         adminId,
-        "club",
-        `${club}이 ${from}에서 ${to}로 이동하였습니다.`
+        beforeClub,
+        afterClub
       );
     }
   );

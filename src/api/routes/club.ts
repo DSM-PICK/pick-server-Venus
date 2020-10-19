@@ -24,9 +24,9 @@ import StudentService from "../../services/studentService";
 import getNoticeEventEvmitter, {
   clubAdd,
   clubDelete,
+  clubInfoChange,
   studentClubChange,
 } from "../../loaders/noticeEventEvmitter";
-import { club } from "./index";
 
 const route = Router();
 
@@ -144,7 +144,15 @@ export default (app: Router) => {
       const { name } = req.params;
       const clubInfoWillChange: IUpdateClub = req.body;
       try {
+        const beforeClub = await clubService.getClubByName(name);
         await clubService.updateClubInformation(name, clubInfoWillChange);
+        const { id } = res.locals.payload;
+        noticeEventEmitter.emit(
+          clubInfoChange,
+          beforeClub,
+          clubInfoWillChange,
+          id
+        );
         res.status(200).json();
       } catch (e) {
         next(e);
