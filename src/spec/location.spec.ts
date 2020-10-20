@@ -2,7 +2,6 @@ import { expect } from "chai";
 
 import { FakeClubLocationRepository } from "./fakes";
 import LocationService from "../services/locationService";
-import { exampleClubLocations } from "./samples";
 
 describe("LocationService", () => {
   const clubLocationRepository = FakeClubLocationRepository.default;
