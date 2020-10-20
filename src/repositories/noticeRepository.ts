@@ -5,8 +5,6 @@ import { Club, Notice } from "../models";
 import { INoticeRepository, IUpdateClub } from "../interfaces";
 import logger from "../loaders/logger";
 
-moment.tz.setDefault("Asia/Seoul");
-
 @EntityRepository(Notice)
 export default class NoticeRepository extends Repository<Notice>
   implements INoticeRepository {
@@ -20,7 +18,7 @@ export default class NoticeRepository extends Repository<Notice>
         admin_id: adminId,
         content,
         category,
-        created_at: moment().toDate(),
+        created_at: moment().tz("Asia/Seoul").toDate(),
       });
 
       await this.save(newNotice);
@@ -47,7 +45,7 @@ export default class NoticeRepository extends Repository<Notice>
             admin_id: adminId,
             content,
             category: "club",
-            created_at: moment().toDate(),
+            created_at: moment().tz("Asia/Seoul").toDate(),
           });
           tasks.push(this.save(notice));
         }
