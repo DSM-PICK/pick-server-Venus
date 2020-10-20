@@ -18,7 +18,9 @@ const fileTransport = new winston.transports.File({
 });
 
 winston.add(consoleTransport);
-winston.add(fileTransport);
+if (process.env.NODE_ENV !== "test") {
+  winston.add(fileTransport);
+}
 
 export const errorStream = {
   write: (message) => winston.error(message.trim()),
