@@ -1,6 +1,8 @@
 import { EntityRepository, Repository } from "typeorm";
+
 import { Club, Notice } from "../models";
 import { INoticeRepository, IUpdateClub } from "../interfaces";
+import logger from "../loaders/logger";
 
 @EntityRepository(Notice)
 export default class NoticeRepository extends Repository<Notice>
@@ -19,8 +21,7 @@ export default class NoticeRepository extends Repository<Notice>
       });
       await this.save(newNotice);
     } catch (e) {
-      console.log(e);
-      // TODO 에러 처리
+      logger.error(e);
     }
   }
 
@@ -30,23 +31,27 @@ export default class NoticeRepository extends Repository<Notice>
     afterClub: IUpdateClub
   ): Promise<void> {
     const tasks = [];
-    for (let prop in afterClub) {
-      if (afterClub.hasOwnProperty(prop) && afterClub[prop]) {
-        const content = NoticeRepository.makeContentByProperty(
-          prop,
-          beforeClub,
-          afterClub
-        );
-        const notice = this.create({
-          admin_id: adminId,
-          content,
-          category: "club",
-          created_at: new Date(),
-        });
-        tasks.push(this.save(notice));
+    try {
+      for (let prop in afterClub) {
+        if (afterClub.hasOwnProperty(prop) && afterClub[prop]) {
+          const content = NoticeRepository.makeContentByProperty(
+            prop,
+            beforeClub,
+            afterClub
+          );
+          const notice = this.create({
+            admin_id: adminId,
+            content,
+            category: "club",
+            created_at: new Date(),
+          });
+          tasks.push(this.save(notice));
+        }
       }
+      await Promise.all(tasks);
+    } catch (e) {
+      logger.error(e);
     }
-    await Promise.all(tasks);
   }
 
   private static makeContentByProperty(

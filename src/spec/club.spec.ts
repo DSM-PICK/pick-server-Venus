@@ -2,7 +2,6 @@ import { expect } from "chai";
 
 import { ClubService } from "../services";
 import {
-  fakeLogger,
   FakeClubRepository,
   FakeStudentRepository,
   FakeClubLocationRepository,
@@ -24,8 +23,7 @@ clubRepository.setClubLocationRepository(clubLocationRepository);
 const clubService = new ClubService(
   clubRepository,
   clubLocationRepository,
-  studentRepository,
-  fakeLogger
+  studentRepository
 );
 
 beforeEach(async () => {

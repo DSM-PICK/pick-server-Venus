@@ -1,8 +1,7 @@
 import { EntityRepository, Repository } from "typeorm";
 
-import { Club, Student } from "../models";
+import { Student } from "../models";
 import { IStudentRepository } from "../interfaces";
-import { clubNotFoundError } from "../errors";
 
 @EntityRepository(Student)
 export default class StudentRepository extends Repository<Student>
