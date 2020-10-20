@@ -1,5 +1,4 @@
 import {
-  ILogger,
   IClubRepository,
   IClub,
   IStudentRepository,
@@ -19,8 +18,7 @@ export default class ClubService {
   constructor(
     private clubRepository: IClubRepository,
     private clubLocationRepository: IClubLocationRepository,
-    private studentRepository: IStudentRepository,
-    private logger: ILogger
+    private studentRepository: IStudentRepository
   ) {}
 
   public getClubs(): Promise<IGetClubsResponse[]> {

@@ -4,7 +4,7 @@ import { expect, use } from "chai";
 import * as chaiAsPromised from "chai-as-promised";
 
 import { AuthService } from "../services";
-import { FakeAdminRepository, fakeLogger } from "./fakes";
+import { FakeAdminRepository } from "./fakes";
 import { IAdmin } from "../interfaces";
 import {
   invalidLoginInformationError,
@@ -18,11 +18,7 @@ use(chaiAsPromised);
 describe("AuthService", () => {
   const jwtSecret = "venus_test";
   let stub;
-  const authService = new AuthService(
-    FakeAdminRepository.default,
-    fakeLogger,
-    jwtSecret
-  );
+  const authService = new AuthService(FakeAdminRepository.default, jwtSecret);
 
   describe("signIn", () => {
     beforeEach(() => {

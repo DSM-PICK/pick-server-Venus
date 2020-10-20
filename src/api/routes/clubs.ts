@@ -4,7 +4,6 @@ import { getCustomRepository } from "typeorm";
 import isAuth from "../middlewares/tokenVerification";
 import ClubRepository from "../../repositories/clubRepository";
 import ClubService from "../../services/clubService";
-import logger from "../../loaders/logger";
 import { ClubLocationRepository, StudentRepository } from "../../repositories";
 
 const route = Router();
@@ -18,8 +17,7 @@ export default (app: Router) => {
   const clubService = new ClubService(
     clubRepository,
     clubLocationRepository,
-    studentRepository,
-    logger
+    studentRepository
   );
 
   route.get(

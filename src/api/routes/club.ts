@@ -18,7 +18,6 @@ import {
   NoticeRepository,
 } from "../../repositories";
 import ClubService from "../../services/clubService";
-import logger from "../../loaders/logger";
 import StudentRepository from "../../repositories/studentRepository";
 import StudentService from "../../services/studentService";
 import getNoticeEventEvmitter, {
@@ -40,8 +39,7 @@ export default (app: Router) => {
   const clubService = new ClubService(
     clubRepository,
     clubLocationRepository,
-    studentRepository,
-    logger
+    studentRepository
   );
   const studentService = new StudentService(studentRepository, clubRepository);
   const noticeEventEmitter = getNoticeEventEvmitter(noticeRepository);

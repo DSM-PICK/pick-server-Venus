@@ -9,7 +9,6 @@ import {
   refreshSchema,
 } from "../middlewares/paramValidation/schema";
 import config from "../../config";
-import logger from "../../loaders/logger";
 import validate, { Property } from "../middlewares/paramValidation";
 import { expiredTokenError, invalidTokenError } from "../../errors";
 import { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
@@ -20,11 +19,7 @@ export default (app: Router) => {
   app.use("/auth", route);
 
   const adminRepository = getCustomRepository(AdminRepository);
-  const authService = new AuthService(
-    adminRepository,
-    logger,
-    config.jwtSecret
-  );
+  const authService = new AuthService(adminRepository, config.jwtSecret);
 
   route.post(
     "/",
