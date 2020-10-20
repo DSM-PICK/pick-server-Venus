@@ -27,8 +27,9 @@ export default ({ app }: { app: express.Application }) => {
       skip: (req, res) => res.statusCode >= 500,
     })
   );
-  app.use((req, res) => {
+  app.use((req, res, next) => {
     res.setHeader("Cache-Control", "no-store");
+    next();
   });
 
   app.use("/venus", route());
