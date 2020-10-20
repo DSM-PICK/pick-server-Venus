@@ -1,7 +1,7 @@
 import * as bcrypt from "bcrypt";
 import * as jwt from "jsonwebtoken";
 
-import { IAdmin, IAdminRepository, ILogger } from "../interfaces";
+import { IAdmin, IAdminRepository } from "../interfaces";
 import {
   invalidLoginInformationError,
   invalidTokenError,
@@ -11,7 +11,6 @@ import {
 export default class AuthService {
   constructor(
     private adminRepository: IAdminRepository,
-    private logger: ILogger,
     private jwtSecret: string
   ) {}
 
@@ -32,7 +31,6 @@ export default class AuthService {
       id: adminRecord.id,
       type: "refresh",
     });
-    this.logger.debug("token generated");
 
     return { access_token, refresh_token };
   }
@@ -67,7 +65,6 @@ export default class AuthService {
     dbPassword: string,
     inputPassword: string
   ): boolean {
-    this.logger.debug("validating password");
     return !bcrypt.compareSync(inputPassword, dbPassword);
   }
 }
