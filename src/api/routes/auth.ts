@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response, Router } from "express";
 import { getCustomRepository } from "typeorm";
+import { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
 
 import { IAdmin } from "../../interfaces";
 import { AuthService } from "../../services";
@@ -11,7 +12,7 @@ import {
 import config from "../../config";
 import validate, { Property } from "../middlewares/paramValidation";
 import { expiredTokenError, invalidTokenError } from "../../errors";
-import { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
+import isAuth from "../middlewares/tokenVerification";
 
 const route = Router();
 
@@ -55,4 +56,8 @@ export default (app: Router) => {
       }
     }
   );
+
+  route.get("/check", isAuth, (req: Request, res: Response) => {
+    res.status(200).json();
+  });
 };
