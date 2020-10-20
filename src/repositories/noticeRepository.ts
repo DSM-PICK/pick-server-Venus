@@ -1,8 +1,11 @@
 import { EntityRepository, Repository } from "typeorm";
+import * as moment from "moment";
 
 import { Club, Notice } from "../models";
 import { INoticeRepository, IUpdateClub } from "../interfaces";
 import logger from "../loaders/logger";
+
+moment.tz.setDefault("Asia/Seoul");
 
 @EntityRepository(Notice)
 export default class NoticeRepository extends Repository<Notice>
@@ -17,8 +20,9 @@ export default class NoticeRepository extends Repository<Notice>
         admin_id: adminId,
         content,
         category,
-        created_at: new Date(),
+        created_at: moment().toDate(),
       });
+
       await this.save(newNotice);
     } catch (e) {
       logger.error(e);
@@ -43,7 +47,7 @@ export default class NoticeRepository extends Repository<Notice>
             admin_id: adminId,
             content,
             category: "club",
-            created_at: new Date(),
+            created_at: moment().toDate(),
           });
           tasks.push(this.save(notice));
         }
