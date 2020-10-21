@@ -1,8 +1,4 @@
-import {
-  Entity,
-  Column,
-  PrimaryColumn
-} from 'typeorm'
+import { Entity, Column, PrimaryColumn } from "typeorm";
 
 @Entity()
 export class Student {
@@ -12,7 +8,7 @@ export class Student {
   @Column({ length: 12 })
   name: string;
 
-  @Column({ length: 20, nullable: true })
+  @Column({ length: 20, default: "자습 동아리" })
   club_name: string;
 
   @Column({ length: 20 })
