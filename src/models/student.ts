@@ -8,7 +8,7 @@ export class Student {
   @Column({ length: 12 })
   name: string;
 
-  @Column({ length: 20, default: "자습 동아리" })
+  @Column({ length: 20, default: "자습" })
   club_name: string;
 
   @Column({ length: 20 })
