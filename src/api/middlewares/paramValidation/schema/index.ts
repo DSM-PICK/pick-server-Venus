@@ -1,7 +1,7 @@
 import loginSchema from "./loginSchema";
 import authSchema from "./authSchema";
 import refreshSchema from "./refreshSchema";
-import clubSchema from "./clubSchema";
+import addClubSchema from "./addClubSchema";
 import deleteClubSchema from "./deleteClubSchema";
 import getClubNameSchema from "./getClubNameSchema";
 import patchClubSchema from "./patchClubSchema";
@@ -14,7 +14,7 @@ export {
   loginSchema,
   authSchema,
   refreshSchema,
-  clubSchema,
+  addClubSchema,
   deleteClubSchema,
   getClubNameSchema,
   patchClubSchema,
