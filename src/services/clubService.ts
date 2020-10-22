@@ -39,7 +39,7 @@ export default class ClubService {
     };
   }
 
-  public async addClub(club: IClub): Promise<Club> {
+  public async addClub(club: IClub, studentsNum: string[]): Promise<Club> {
     if (
       (await this.clubLocationRepository.isNotExistLocation(club.location)) ||
       (await this.clubRepository.findClubByName(club.name)) ||
@@ -47,7 +47,11 @@ export default class ClubService {
     ) {
       throw invalidParameterError;
     }
-    return this.clubRepository.addClub(club);
+    const createdClub = await this.clubRepository.addClub(club);
+    if (studentsNum.length) {
+      await this.studentRepository.updateStudentClub(club.name, studentsNum);
+    }
+    return createdClub;
   }
 
   public async deleteClub(clubName: string): Promise<void> {

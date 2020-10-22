@@ -4,7 +4,7 @@ import { getCustomRepository } from "typeorm";
 import validate, { Property } from "../middlewares/paramValidation";
 import isAuth from "../middlewares/tokenVerification";
 import {
-  clubSchema,
+  addClubSchema,
   deleteClubSchema,
   getClubNameSchema,
   patchClubSchema,
@@ -83,11 +83,12 @@ export default (app: Router) => {
   route.post(
     "/",
     isAuth,
-    validate({ schema: clubSchema, property: Property.BODY }),
+    validate({ schema: addClubSchema, property: Property.BODY }),
     async (req: Request, res: Response, next: NextFunction) => {
-      const club: IClub = req.body;
+      const club: IClub = req.body.club;
+      const studentsNum: string[] = req.body.students_num;
       try {
-        const createdClub = await clubService.addClub(club);
+        const createdClub = await clubService.addClub(club, studentsNum);
         const { name, location } = club;
         const { id } = res.locals.payload;
         noticeEventEmitter.emit(clubAdd, name, location, id);
