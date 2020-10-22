@@ -1,5 +1,5 @@
 import { IClubRepository, IStudentRepository } from "../interfaces";
-import { clubNotFoundError } from "../errors";
+import { clubNotFoundError, invalidParameterError } from "../errors";
 import { Student } from "../models";
 
 export default class StudentService {
@@ -14,6 +14,9 @@ export default class StudentService {
   ): Promise<void> {
     if (!(await this.clubRepository.findClubByName(toClubName))) {
       throw clubNotFoundError;
+    }
+    if (!studentsNum.length) {
+      throw invalidParameterError;
     }
     await this.studentRepository.updateStudentClub(toClubName, studentsNum);
   }
