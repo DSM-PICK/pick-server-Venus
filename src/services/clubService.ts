@@ -54,6 +54,7 @@ export default class ClubService {
     if (!(await this.clubRepository.findClubByName(clubName))) {
       throw clubNotFoundError;
     }
+    await this.studentRepository.updateStudentClubToSelfStudy(clubName);
     await this.clubRepository.deleteClubByName(clubName);
   }
 
