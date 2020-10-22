@@ -60,6 +60,17 @@ export default class FakeStudentRepository implements IStudentRepository {
     });
   }
 
+  public updateStudentClubToSelfStudy(clubName: string): Promise<void> {
+    return new Promise<void>((resolve) => {
+      this.students = this.students.map((student) =>
+        student.club_name !== clubName
+          ? student
+          : { ...student, club_name: "자습" }
+      );
+      resolve();
+    });
+  }
+
   public addStudent(student: Student): void {
     this.students.push(student);
   }

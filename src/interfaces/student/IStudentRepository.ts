@@ -5,4 +5,5 @@ export default interface IStudentRepository {
   updateStudentClub(toClubName: string, studentsNum: string[]): Promise<void>;
   findStudentsByNumAndName(numAndName: string): Promise<Student[]>;
   findStudentsByNums(nums: string[]): Promise<Student[]>;
+  updateStudentClubToSelfStudy(clubName: string): Promise<void>;
 }

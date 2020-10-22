@@ -34,4 +34,8 @@ export default class StudentRepository extends Repository<Student>
       .where("num IN (:nums)", { nums })
       .getMany();
   }
+
+  public async updateStudentClubToSelfStudy(clubName: string): Promise<void> {
+    await this.update({ club_name: clubName }, { club_name: "자습" });
+  }
 }
