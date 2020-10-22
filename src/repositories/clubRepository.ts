@@ -1,7 +1,6 @@
 import { EntityRepository, Repository } from "typeorm";
 import { Club, ClubLocation } from "../models";
 import {
-  IClub,
   IClubFromORM,
   IClubRepository,
   IGetClubsResponse,

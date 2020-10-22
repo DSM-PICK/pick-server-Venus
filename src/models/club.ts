@@ -5,7 +5,7 @@ export class Club {
   @PrimaryColumn({ length: 20 })
   name: string;
 
-  @Column({ length: 20, unique: true, nullable: true })
+  @Column({ length: 20, unique: true })
   location: string;
 
   @Column({ length: 10 })
