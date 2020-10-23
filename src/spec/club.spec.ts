@@ -121,7 +121,7 @@ describe("ClubService", () => {
         },
       ];
 
-      expect(await clubService.addClub(club)).to.deep.equal(club);
+      expect(await clubService.addClub(club, [])).to.deep.equal(club);
       expect(await clubService.getClubs()).to.deep.equal(expectedResult);
     });
 
@@ -132,7 +132,7 @@ describe("ClubService", () => {
         teacher: "선생님",
         club_head: "친구",
       };
-      await expect(clubService.addClub(club)).to.be.rejectedWith(
+      await expect(clubService.addClub(club, [])).to.be.rejectedWith(
         invalidParameterError
       );
     });
@@ -144,7 +144,7 @@ describe("ClubService", () => {
         teacher: "두목",
         club_head: "킹갓",
       };
-      await expect(clubService.addClub(club)).to.be.rejectedWith(
+      await expect(clubService.addClub(club, [])).to.be.rejectedWith(
         invalidParameterError
       );
     });
@@ -156,9 +156,53 @@ describe("ClubService", () => {
         teacher: "두목",
         club_head: "킹갓",
       };
-      await expect(clubService.addClub(club)).to.be.rejectedWith(
+      await expect(clubService.addClub(club, [])).to.be.rejectedWith(
         invalidParameterError
       );
+    });
+
+    it("should add club with students", async () => {
+      const club: Club = {
+        name: "ImagineClub",
+        location: "보안 1실",
+        teacher: "두목",
+        club_head: "킹갓",
+      };
+      const studentsNum = ["1101", "2103", "2304"];
+
+      await clubService.addClub(club, studentsNum);
+
+      const result = await clubService.getClubByNameWithStudents("ImagineClub");
+      expect(result).to.deep.equal({
+        club: {
+          name: "ImagineClub",
+          location: "보안 1실",
+          teacher: "두목",
+          club_head: "킹갓",
+          floor: 3,
+          priority: 1,
+        },
+        students: [
+          {
+            name: "김김김",
+            club_name: "ImagineClub",
+            class_name: null,
+            num: "1101",
+          },
+          {
+            name: "황황황",
+            club_name: "ImagineClub",
+            class_name: null,
+            num: "2103",
+          },
+          {
+            name: "진진진",
+            club_name: "ImagineClub",
+            class_name: null,
+            num: "2304",
+          },
+        ],
+      });
     });
   });
 

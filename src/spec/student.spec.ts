@@ -2,7 +2,7 @@ import { expect } from "chai";
 
 import { FakeStudentRepository, FakeClubRepository } from "./fakes";
 import StudentService from "../services/studentService";
-import { clubNotFoundError } from "../errors";
+import { clubNotFoundError, invalidParameterError } from "../errors";
 
 describe("StudentService", () => {
   const studentRepository = FakeStudentRepository.default;
@@ -59,6 +59,14 @@ describe("StudentService", () => {
       await expect(
         studentService.updateStudentClub(toClubName, studentsNum)
       ).to.be.rejectedWith(clubNotFoundError);
+    });
+
+    it("should throw invalid parameter error without studentsNum", async () => {
+      const toClubName = "팬텀";
+
+      await expect(
+        studentService.updateStudentClub(toClubName, [])
+      ).to.be.rejectedWith(invalidParameterError);
     });
   });
 
