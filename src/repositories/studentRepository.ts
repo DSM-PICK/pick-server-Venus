@@ -36,6 +36,6 @@ export default class StudentRepository extends Repository<Student>
   }
 
   public async updateStudentClubToSelfStudy(clubName: string): Promise<void> {
-    await this.update({ club_name: clubName }, { club_name: "자습" });
+    await this.update({ club_name: clubName }, { club_name: "창조실" });
   }
 }
