@@ -69,7 +69,7 @@ export default class ClubService {
     const existentInfo = {};
     let existentInfoCount = 0;
     for (let infoWillChange in club) {
-      if (club.hasOwnProperty(infoWillChange) && club[infoWillChange]) {
+      if (club.hasOwnProperty(infoWillChange) && ((infoWillChange === "teacher" || infoWillChange === "club_head") || club[infoWillChange])) {
         existentInfoCount++;
         existentInfo[infoWillChange] = club[infoWillChange];
       }
