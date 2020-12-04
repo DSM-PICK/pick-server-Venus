@@ -1,6 +1,6 @@
 import { EventEmitter } from "events";
 
-import { INoticeRepository, IUpdateClub } from "../interfaces";
+import { NoticeRepository, UpdateClubRequest } from "../interfaces";
 import { Club } from "../models";
 
 const eventEmitter = new EventEmitter();
@@ -10,7 +10,7 @@ export const clubDelete = Symbol("clubDelete");
 export const clubAdd = Symbol("clubAdd");
 export const clubInfoChange = Symbol("clubInfoChange");
 
-export default (noticeRepository: INoticeRepository) => {
+export default (noticeRepository: NoticeRepository) => {
   eventEmitter.on(
     studentClubChange,
     async (from: string, to: string, students: string[], adminId: string) => {
@@ -46,7 +46,7 @@ export default (noticeRepository: INoticeRepository) => {
 
   eventEmitter.on(
     clubInfoChange,
-    async (beforeClub: Club, afterClub: IUpdateClub, adminId: string) => {
+    async (beforeClub: Club, afterClub: UpdateClubRequest, adminId: string) => {
       await noticeRepository.addNoticeWhenClubInfoChange(
         adminId,
         beforeClub,

@@ -1,13 +1,13 @@
-import IClub from "./IClub";
-import IClubFromORM from "./IClubFromORM";
-import IClubLocationRepository from "./IClubLocationRepository";
-import IClubRepository from "./IClubRepository";
-import IUpdateClub from "./IUpdateClub";
+import Club from "./Club";
+import ClubFromORM from "./ClubFromORM";
+import ClubLocationRepository from "./ClubLocationRepository";
+import ClubRepository from "./ClubRepository";
+import UpdateClubRequest from "./UpdateClubRequest";
 
 export {
-  IClubRepository,
-  IClubLocationRepository,
-  IClubFromORM,
-  IClub,
-  IUpdateClub,
+  ClubRepository,
+  ClubLocationRepository,
+  ClubFromORM,
+  Club,
+  UpdateClubRequest,
 };

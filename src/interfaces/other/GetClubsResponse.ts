@@ -1,4 +1,4 @@
-export default interface IGetClubsResponse {
+export default interface GetClubsResponse {
   name: string;
   location: string;
   teacher: string;

@@ -2,9 +2,9 @@ import { expect } from "chai";
 
 import { ClubService } from "../services";
 import {
+  FakeClubLocationRepository,
   FakeClubRepository,
   FakeStudentRepository,
-  FakeClubLocationRepository,
 } from "./fakes";
 import { Club } from "../models";
 import {
@@ -14,7 +14,7 @@ import {
   locationAlreadyAssignedError,
 } from "../errors";
 import { exampleClubLocations, exampleClubs, exampleStudents } from "./samples";
-import { IClub } from "../interfaces";
+import { Club } from "../interfaces";
 
 const clubRepository = FakeClubRepository.default;
 const clubLocationRepository = FakeClubLocationRepository.default;
@@ -281,7 +281,7 @@ describe("ClubService", () => {
       const clubInformation = {
         name: "Down",
         club_head: "짱구",
-      } as IClub;
+      } as Club;
 
       await clubService.updateClubInformation(clubName, clubInformation);
 

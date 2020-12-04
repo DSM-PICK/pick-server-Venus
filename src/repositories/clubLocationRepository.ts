@@ -1,10 +1,10 @@
 import { EntityRepository, Repository } from "typeorm";
 import { Club, ClubLocation } from "../models";
-import { IClubLocationRepository } from "../interfaces";
+import { ClubLocationRepository } from "../interfaces";
 
 @EntityRepository(ClubLocation)
-export default class ClubLocationRepository extends Repository<ClubLocation>
-  implements IClubLocationRepository {
+export default class ClubLocationRepositoryImpl extends Repository<ClubLocation>
+  implements ClubLocationRepository {
   public async isNotExistLocation(location: string): Promise<boolean> {
     const check = await this.findOne({ location });
     return !check;

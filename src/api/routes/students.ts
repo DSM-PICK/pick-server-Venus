@@ -1,11 +1,8 @@
-import { NextFunction, Request, Response, Router } from "express";
-import { getCustomRepository } from "typeorm";
+import { Router } from "express";
 
 import isAuth from "../middlewares/tokenVerification";
 import validate, { Property } from "../middlewares/paramValidation";
 import { getStudentSearchSchema } from "../middlewares/paramValidation/schema";
-import StudentService from "../../services/studentService";
-import { ClubRepository, StudentRepository } from "../../repositories";
 import tryCatchHandler from "../middlewares/tryCatchHandler";
 import StudentController from "../../controllers/student";
 

@@ -1,4 +1,4 @@
-import IAdmin from "./IAdmin";
-import IAdminRepository from "./IAdminRepository";
+import Admin from "./Admin";
+import AdminRepository from "./AdminRepository";
 
-export { IAdminRepository, IAdmin };
+export { AdminRepository, Admin };

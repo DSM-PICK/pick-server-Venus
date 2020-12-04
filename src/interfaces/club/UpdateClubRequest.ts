@@ -1,4 +1,4 @@
-export default interface IUpdateClub {
+export default interface UpdateClubRequest {
   name?: string;
   location?: string;
   teacher?: string;

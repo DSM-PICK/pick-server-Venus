@@ -1,12 +1,11 @@
 import {
-  IClubRepository,
-  IClub,
-  IStudentRepository,
-  IClubLocationRepository,
-  IGetClubsResponse,
-  IUpdateClub,
+  Club,
+  ClubLocationRepository,
+  ClubRepository,
+  GetClubsResponse,
+  StudentRepository,
+  UpdateClubRequest,
 } from "../interfaces";
-import { Club } from "../models";
 import {
   clubLocationNotFoundError,
   clubNotFoundError,
@@ -16,12 +15,12 @@ import {
 
 export default class ClubService {
   constructor(
-    private clubRepository: IClubRepository,
-    private clubLocationRepository: IClubLocationRepository,
-    private studentRepository: IStudentRepository
+    private clubRepository: ClubRepository,
+    private clubLocationRepository: ClubLocationRepository,
+    private studentRepository: StudentRepository
   ) {}
 
-  public getClubs(): Promise<IGetClubsResponse[]> {
+  public getClubs(): Promise<GetClubsResponse[]> {
     return this.clubRepository.findAll();
   }
 
@@ -39,7 +38,7 @@ export default class ClubService {
     };
   }
 
-  public async addClub(club: IClub, studentsNum: string[]): Promise<Club> {
+  public async addClub(club: Club, studentsNum: string[]): Promise<Club> {
     if (
       (await this.clubLocationRepository.isNotExistLocation(club.location)) ||
       (await this.clubRepository.findClubByName(club.name)) ||
@@ -62,7 +61,10 @@ export default class ClubService {
     await this.clubRepository.deleteClubByName(clubName);
   }
 
-  public async updateClubInformation(clubName: string, club: IUpdateClub) {
+  public async updateClubInformation(
+    clubName: string,
+    club: UpdateClubRequest
+  ) {
     if (!(await this.clubRepository.findClubByName(clubName))) {
       throw clubNotFoundError;
     }

@@ -1,4 +1,4 @@
-export default interface ILogger {
+export default interface Logger {
   info(message: string);
   error(message: string);
   emerg(message: string);

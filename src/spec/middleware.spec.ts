@@ -1,6 +1,6 @@
 import * as jwt from "jsonwebtoken";
-import { expect } from "chai";
 import { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
+import { expect } from "chai";
 
 import verify from "../api/middlewares/tokenVerification/verify";
 import { invalidTokenError, notAccessTokenError } from "../errors";

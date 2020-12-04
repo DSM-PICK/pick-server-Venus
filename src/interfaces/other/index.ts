@@ -1,5 +1,5 @@
-import IGetClubsResponse from "./IGetClubsResponse";
-import ILogger from "./ILogger";
-import IPatchClubRequest from "./IPatchClubRequest";
+import GetClubsResponse from "./GetClubsResponse";
+import Logger from "./Logger";
+import PatchClubRequest from "./PatchClubRequest";
 
-export { IGetClubsResponse, ILogger, IPatchClubRequest };
+export { GetClubsResponse, Logger, PatchClubRequest };

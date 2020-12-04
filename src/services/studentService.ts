@@ -1,11 +1,10 @@
-import { IClubRepository, IStudentRepository } from "../interfaces";
+import { ClubRepository, StudentRepository, Student } from "../interfaces";
 import { clubNotFoundError, invalidParameterError } from "../errors";
-import { Student } from "../models";
 
 export default class StudentService {
   constructor(
-    private studentRepository: IStudentRepository,
-    private clubRepository: IClubRepository
+    private studentRepository: StudentRepository,
+    private clubRepository: ClubRepository
   ) {}
 
   public async updateStudentClub(

@@ -1,9 +1,6 @@
-import { NextFunction, Request, Response, Router } from "express";
-import { getCustomRepository } from "typeorm";
+import { Router } from "express";
 
 import isAuth from "../middlewares/tokenVerification";
-import { LocationService } from "../../services";
-import { ClubLocationRepository } from "../../repositories";
 import validate, { Property } from "../middlewares/paramValidation";
 import { getLocationsSearchSchema } from "../middlewares/paramValidation/schema";
 import tryCatchHandler from "../middlewares/tryCatchHandler";

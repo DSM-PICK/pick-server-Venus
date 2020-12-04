@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import { getCustomRepository } from "typeorm";
 
-import { IPatchClubRequest } from "../interfaces/other";
-import {
+import { PatchClubRequest } from "../interfaces/other";
+import getNoticeEventEmitter, {
   clubAdd,
   clubDelete,
   clubInfoChange,
@@ -15,8 +15,7 @@ import {
   NoticeRepository,
   StudentRepository,
 } from "../repositories";
-import getNoticeEventEmitter from "../loaders/noticeEventEmitter";
-import { IClub, IUpdateClub } from "../interfaces/club";
+import { Club, UpdateClubRequest } from "../interfaces/club";
 import ClubService from "../services/clubService";
 
 export default class ClubController {
@@ -42,7 +41,7 @@ export default class ClubController {
     res: Response,
     next: NextFunction
   ) => {
-    const moveInfo: IPatchClubRequest = req.body;
+    const moveInfo: PatchClubRequest = req.body;
     const { students_num, to_club_name } = moveInfo;
     const students = await ClubController.studentService.getStudentsByNums(
       students_num
@@ -77,7 +76,7 @@ export default class ClubController {
     res: Response,
     next: NextFunction
   ) => {
-    const club: IClub = req.body.club;
+    const club: Club = req.body.club;
     const studentsNum: string[] = req.body.students_num;
     const createdClub = await ClubController.clubService.addClub(
       club,
@@ -108,7 +107,7 @@ export default class ClubController {
     next: NextFunction
   ) => {
     const { name } = req.params;
-    const clubInfoWillChange: IUpdateClub = req.body;
+    const clubInfoWillChange: UpdateClubRequest = req.body;
     const beforeClub = await ClubController.clubService.getClubByName(name);
     await ClubController.clubService.updateClubInformation(
       name,

@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { IAdmin } from "../interfaces/admin";
+import { Admin } from "../interfaces/admin";
 import { getCustomRepository } from "typeorm";
 import { AdminRepository } from "../repositories";
 import AuthService from "../services/authService";
@@ -15,7 +15,7 @@ export default class AuthController {
   );
 
   static signIn = async (req: Request, res: Response, next: NextFunction) => {
-    const admin: IAdmin = req.body;
+    const admin: Admin = req.body;
     const tokens = await AuthController.authService.signIn(admin);
     return res.status(200).json(tokens);
   };

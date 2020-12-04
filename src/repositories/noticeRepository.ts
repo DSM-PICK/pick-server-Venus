@@ -2,12 +2,12 @@ import { EntityRepository, Repository } from "typeorm";
 import * as moment from "moment";
 
 import { Club, Notice } from "../models";
-import { INoticeRepository, IUpdateClub } from "../interfaces";
+import { NoticeRepository, UpdateClubRequest } from "../interfaces";
 import logger from "../loaders/logger";
 
 @EntityRepository(Notice)
-export default class NoticeRepository extends Repository<Notice>
-  implements INoticeRepository {
+export default class NoticeRepositoryImpl extends Repository<Notice>
+  implements NoticeRepository {
   public async addNotice(
     adminId: string,
     category: string,
@@ -30,13 +30,13 @@ export default class NoticeRepository extends Repository<Notice>
   public async addNoticeWhenClubInfoChange(
     adminId: string,
     beforeClub: Club,
-    afterClub: IUpdateClub
+    afterClub: UpdateClubRequest
   ): Promise<void> {
     const tasks = [];
     try {
       for (let prop in afterClub) {
         if (afterClub.hasOwnProperty(prop) && afterClub[prop]) {
-          const content = NoticeRepository.makeContentByProperty(
+          const content = NoticeRepositoryImpl.makeContentByProperty(
             prop,
             beforeClub,
             afterClub
@@ -59,7 +59,7 @@ export default class NoticeRepository extends Repository<Notice>
   private static makeContentByProperty(
     prop: string,
     beforeClub: Club,
-    afterClub: IUpdateClub
+    afterClub: UpdateClubRequest
   ): string {
     let content: string;
     switch (prop) {

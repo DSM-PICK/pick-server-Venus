@@ -1,13 +1,13 @@
-import AdminRepository from "./adminRepository";
-import ClubRepository from "./clubRepository";
-import ClubLocationRepository from "./clubLocationRepository";
-import StudentRepository from "./studentRepository";
-import NoticeRepository from "./noticeRepository";
+import AdminRepositoryImpl from "./adminRepository";
+import ClubRepositoryImpl from "./clubRepository";
+import ClubLocationRepositoryImpl from "./clubLocationRepository";
+import StudentRepositoryImpl from "./studentRepository";
+import NoticeRepositoryImpl from "./noticeRepository";
 
 export {
-  AdminRepository,
-  ClubRepository,
-  ClubLocationRepository,
-  StudentRepository,
-  NoticeRepository,
+  AdminRepositoryImpl,
+  ClubRepositoryImpl,
+  ClubLocationRepositoryImpl,
+  StudentRepositoryImpl,
+  NoticeRepositoryImpl,
 };

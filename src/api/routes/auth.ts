@@ -1,17 +1,10 @@
-import { NextFunction, Request, Response, Router } from "express";
-import { getCustomRepository } from "typeorm";
-import { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
+import { Request, Response, Router } from "express";
 
-import { IAdmin } from "../../interfaces";
-import { AuthService } from "../../services";
-import { AdminRepository } from "../../repositories";
 import {
   loginSchema,
   refreshSchema,
 } from "../middlewares/paramValidation/schema";
-import config from "../../config";
 import validate, { Property } from "../middlewares/paramValidation";
-import { expiredTokenError, invalidTokenError } from "../../errors";
 import isAuth from "../middlewares/tokenVerification";
 import tryCatchHandler from "../middlewares/tryCatchHandler";
 import AuthController from "../../controllers/auth";

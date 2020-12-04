@@ -1,6 +1,6 @@
 import { expect } from "chai";
 
-import { FakeStudentRepository, FakeClubRepository } from "./fakes";
+import { FakeClubRepository, FakeStudentRepository } from "./fakes";
 import StudentService from "../services/studentService";
 import { clubNotFoundError, invalidParameterError } from "../errors";
 

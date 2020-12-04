@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryColumn, CreateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, PrimaryColumn } from "typeorm";
 
 @Entity()
 export class Notice {
