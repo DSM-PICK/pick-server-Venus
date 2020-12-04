@@ -15,11 +15,14 @@ export default class AuthService {
   ) {}
 
   public async signIn(
-    adminDTO: Admin
+    admin: Admin
   ): Promise<{ access_token: string; refresh_token: string }> {
-    const adminRecord = await this.adminRepository.findOneById(adminDTO.id);
+    const adminRecord = await this.adminRepository.findOneById(admin.id);
 
-    if (!adminRecord || this.isInvalidPassword(adminRecord.pw, adminDTO.pw)) {
+    if (
+      !adminRecord ||
+      AuthService.isInvalidPassword(adminRecord.pw, admin.pw)
+    ) {
       throw invalidLoginInformationError;
     }
 
@@ -61,7 +64,7 @@ export default class AuthService {
     });
   }
 
-  private isInvalidPassword(
+  private static isInvalidPassword(
     dbPassword: string,
     inputPassword: string
   ): boolean {
