@@ -1,11 +1,11 @@
-import { IUpdateClub } from "../club";
+import { UpdateClubRequest } from "../club";
 import { Club } from "../../models";
 
-export default interface INoticeRepository {
+export default interface NoticeRepository {
   addNotice(adminId: string, category: string, content: string): Promise<void>;
   addNoticeWhenClubInfoChange(
     adminId: string,
     beforeClub: Club,
-    afterClub: IUpdateClub
+    afterClub: UpdateClubRequest
   ): Promise<void>;
 }

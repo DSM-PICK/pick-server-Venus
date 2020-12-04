@@ -1,4 +1,4 @@
-export default interface IClubFromORM {
+export default interface ClubFromORM {
   club_name: string;
   club_location: string;
   club_teacher: string;

@@ -1,6 +1,6 @@
 import { Student } from "../../models";
 
-export default interface IStudentRepository {
+export default interface StudentRepository {
   findStudentsByClubName(clubName: string): Promise<Student[]>;
   updateStudentClub(toClubName: string, studentsNum: string[]): Promise<void>;
   findStudentsByNumAndName(numAndName: string): Promise<Student[]>;
