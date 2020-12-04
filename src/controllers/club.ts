@@ -10,19 +10,21 @@ import getNoticeEventEmitter, {
 } from "../loaders/noticeEventEmitter";
 import StudentService from "../services/studentService";
 import {
-  ClubLocationRepository,
-  ClubRepository,
-  NoticeRepository,
-  StudentRepository,
+  ClubLocationRepositoryImpl,
+  ClubRepositoryImpl,
+  NoticeRepositoryImpl,
+  StudentRepositoryImpl,
 } from "../repositories";
 import { Club, UpdateClubRequest } from "../interfaces/club";
 import ClubService from "../services/clubService";
 
 export default class ClubController {
-  static studentRepository = getCustomRepository(StudentRepository);
-  static clubRepository = getCustomRepository(ClubRepository);
-  static noticeRepository = getCustomRepository(NoticeRepository);
-  static clubLocationRepository = getCustomRepository(ClubLocationRepository);
+  static studentRepository = getCustomRepository(StudentRepositoryImpl);
+  static clubRepository = getCustomRepository(ClubRepositoryImpl);
+  static noticeRepository = getCustomRepository(NoticeRepositoryImpl);
+  static clubLocationRepository = getCustomRepository(
+    ClubLocationRepositoryImpl
+  );
   static studentService = new StudentService(
     ClubController.studentRepository,
     ClubController.clubRepository

@@ -1,10 +1,12 @@
 import { getCustomRepository } from "typeorm";
-import { ClubLocationRepository } from "../repositories";
+import { ClubLocationRepositoryImpl } from "../repositories";
 import { LocationService } from "../services";
 import { NextFunction, Request, Response } from "express";
 
 export default class LocationController {
-  static clubLocationRepository = getCustomRepository(ClubLocationRepository);
+  static clubLocationRepository = getCustomRepository(
+    ClubLocationRepositoryImpl
+  );
   static locationService = new LocationService(
     LocationController.clubLocationRepository
   );

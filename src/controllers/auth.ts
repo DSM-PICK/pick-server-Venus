@@ -1,14 +1,14 @@
 import { NextFunction, Request, Response } from "express";
 import { Admin } from "../interfaces/admin";
 import { getCustomRepository } from "typeorm";
-import { AdminRepository } from "../repositories";
+import { AdminRepositoryImpl } from "../repositories";
 import AuthService from "../services/authService";
 import config from "../config";
 import { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
 import { expiredTokenError, invalidTokenError } from "../errors";
 
 export default class AuthController {
-  static adminRepository = getCustomRepository(AdminRepository);
+  static adminRepository = getCustomRepository(AdminRepositoryImpl);
   static authService = new AuthService(
     AuthController.adminRepository,
     config.jwtSecret

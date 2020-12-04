@@ -1,11 +1,11 @@
 import { getCustomRepository } from "typeorm";
-import { ClubRepository, StudentRepository } from "../repositories";
+import { ClubRepositoryImpl, StudentRepositoryImpl } from "../repositories";
 import StudentService from "../services/studentService";
 import { NextFunction, Request, Response } from "express";
 
 export default class StudentController {
-  static studentRepository = getCustomRepository(StudentRepository);
-  static clubRepository = getCustomRepository(ClubRepository);
+  static studentRepository = getCustomRepository(StudentRepositoryImpl);
+  static clubRepository = getCustomRepository(ClubRepositoryImpl);
   static studentService = new StudentService(
     StudentController.studentRepository,
     StudentController.clubRepository
