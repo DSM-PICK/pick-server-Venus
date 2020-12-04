@@ -1,11 +1,11 @@
 import { EntityRepository, Repository } from "typeorm";
 
 import { Student } from "../models";
-import { IStudentRepository } from "../interfaces";
+import { StudentRepository } from "../interfaces";
 
 @EntityRepository(Student)
-export default class StudentRepository extends Repository<Student>
-  implements IStudentRepository {
+export default class StudentRepositoryImpl extends Repository<Student>
+  implements StudentRepository {
   public findStudentsByClubName(clubName: string): Promise<Student[]> {
     return this.find({ club_name: clubName });
   }

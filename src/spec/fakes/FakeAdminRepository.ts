@@ -1,7 +1,7 @@
-import { IAdminRepository } from "../../interfaces";
+import { AdminRepository } from "../../interfaces";
 import { Admin } from "../../models";
 
-export default class FakeAdminRepository implements IAdminRepository {
+export default class FakeAdminRepository implements AdminRepository {
   private static _default: FakeAdminRepository;
   private id: string = "admin";
 

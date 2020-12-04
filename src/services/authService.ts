@@ -1,7 +1,7 @@
 import * as bcrypt from "bcrypt";
 import * as jwt from "jsonwebtoken";
 
-import { IAdmin, IAdminRepository } from "../interfaces";
+import { Admin, AdminRepository } from "../interfaces";
 import {
   invalidLoginInformationError,
   invalidTokenError,
@@ -10,12 +10,12 @@ import {
 
 export default class AuthService {
   constructor(
-    private adminRepository: IAdminRepository,
+    private adminRepository: AdminRepository,
     private jwtSecret: string
   ) {}
 
   public async signIn(
-    adminDTO: IAdmin
+    adminDTO: Admin
   ): Promise<{ access_token: string; refresh_token: string }> {
     const adminRecord = await this.adminRepository.findOneById(adminDTO.id);
 

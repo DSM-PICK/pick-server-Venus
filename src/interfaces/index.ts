@@ -1,26 +1,27 @@
-import { IAdmin, IAdminRepository } from "./admin";
+import { Admin, AdminRepository } from "./admin";
 import {
-  IClub,
-  IClubFromORM,
-  IClubLocationRepository,
-  IClubRepository,
-  IUpdateClub,
+  Club,
+  ClubFromORM,
+  ClubLocationRepository,
+  ClubRepository,
+  UpdateClubRequest,
 } from "./club";
-import { IGetClubsResponse, ILogger, IPatchClubRequest } from "./other";
-import { IStudentRepository } from "./student";
-import { INoticeRepository } from "./notice";
+import { GetClubsResponse, Logger, PatchClubRequest } from "./other";
+import { StudentRepository, Student } from "./student";
+import { NoticeRepository } from "./notice";
 
 export {
-  IAdminRepository,
-  IAdmin,
-  ILogger,
-  IClubRepository,
-  IClub,
-  IClubFromORM,
-  IClubLocationRepository,
-  IGetClubsResponse,
-  IStudentRepository,
-  IPatchClubRequest,
-  IUpdateClub,
-  INoticeRepository,
+  AdminRepository,
+  Admin,
+  Logger,
+  ClubRepository,
+  Club,
+  ClubFromORM,
+  ClubLocationRepository,
+  GetClubsResponse,
+  StudentRepository,
+  PatchClubRequest,
+  UpdateClubRequest,
+  NoticeRepository,
+  Student,
 };

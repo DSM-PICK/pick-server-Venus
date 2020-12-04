@@ -1,3 +1,4 @@
-import IStudentRepository from "./IStudentRepository";
+import StudentRepository from "./StudentRepository";
+import Student from "./Student";
 
-export { IStudentRepository };
+export { StudentRepository, Student };

@@ -1,18 +1,18 @@
 import { EntityRepository, Repository } from "typeorm";
 import { Club, ClubLocation } from "../models";
 import {
-  IClubFromORM,
-  IClubRepository,
-  IGetClubsResponse,
-  IUpdateClub,
+  ClubFromORM,
+  ClubRepository,
+  GetClubsResponse,
+  UpdateClubRequest,
 } from "../interfaces";
 
 @EntityRepository(Club)
-export default class ClubRepository extends Repository<Club>
-  implements IClubRepository {
-  public async findAll(): Promise<IGetClubsResponse[]> {
+export default class ClubRepositoryImpl extends Repository<Club>
+  implements ClubRepository {
+  public async findAll(): Promise<GetClubsResponse[]> {
     const clubs = await this.findAllClubs();
-    return ClubRepository.formatGetClubsResponse(clubs);
+    return ClubRepositoryImpl.formatGetClubsResponse(clubs);
   }
 
   public addClub(club: Club): Promise<Club> {
@@ -29,8 +29,8 @@ export default class ClubRepository extends Repository<Club>
 
   public async findClubByNameWithLocation(
     name: string
-  ): Promise<IGetClubsResponse> {
-    return ClubRepository.formatGetClubNameResponse(
+  ): Promise<GetClubsResponse> {
+    return ClubRepositoryImpl.formatGetClubNameResponse(
       await this.createQueryBuilder("club")
         .leftJoinAndSelect(
           ClubLocation,
@@ -46,7 +46,10 @@ export default class ClubRepository extends Repository<Club>
     await this.delete({ name });
   }
 
-  public async updateClub(clubName: string, club: IUpdateClub): Promise<void> {
+  public async updateClub(
+    clubName: string,
+    club: UpdateClubRequest
+  ): Promise<void> {
     await this.update({ name: clubName }, { ...club });
   }
 
@@ -54,7 +57,7 @@ export default class ClubRepository extends Repository<Club>
     return Boolean(await this.findOne({ location }));
   }
 
-  private findAllClubs(): Promise<IClubFromORM[]> {
+  private findAllClubs(): Promise<ClubFromORM[]> {
     return this.createQueryBuilder("club")
       .leftJoinAndSelect(
         ClubLocation,
@@ -66,14 +69,14 @@ export default class ClubRepository extends Repository<Club>
   }
 
   private static formatGetClubsResponse(
-    clubs: IClubFromORM[]
-  ): IGetClubsResponse[] {
+    clubs: ClubFromORM[]
+  ): GetClubsResponse[] {
     return clubs.map((club) => this.defineGetClubsResponseFormat(club));
   }
 
   private static formatGetClubNameResponse(
-    club: IClubFromORM
-  ): IGetClubsResponse {
+    club: ClubFromORM
+  ): GetClubsResponse {
     return this.defineGetClubsResponseFormat(club);
   }
 
@@ -84,7 +87,7 @@ export default class ClubRepository extends Repository<Club>
     club_name,
     clubLocation_floor,
     clubLocation_priority,
-  }: IClubFromORM) {
+  }: ClubFromORM) {
     return Object.defineProperties(
       {},
       {

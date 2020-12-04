@@ -1,7 +1,7 @@
-import { IStudentRepository } from "../../interfaces";
+import { StudentRepository } from "../../interfaces";
 import { Student } from "../../models";
 
-export default class FakeStudentRepository implements IStudentRepository {
+export default class FakeStudentRepository implements StudentRepository {
   private static _default: FakeStudentRepository;
   private students: Student[] = [];
 

@@ -1,3 +1,3 @@
-import INoticeRepository from "./INoticeRepository";
+import NoticeRepository from "./NoticeRepository";
 
-export { INoticeRepository };
+export { NoticeRepository };

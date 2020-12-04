@@ -1,9 +1,9 @@
-import IClubLocationRepository from "../../interfaces/club/IClubLocationRepository";
+import ClubLocationRepository from "../../interfaces/club/ClubLocationRepository";
 import { ClubLocation } from "../../models";
 import FakeClubRepository from "./FakeClubRepository";
 
 export default class FakeClubLocationRepository
-  implements IClubLocationRepository {
+  implements ClubLocationRepository {
   private static _default: FakeClubLocationRepository;
   private clubLocations: ClubLocation[] = [];
 

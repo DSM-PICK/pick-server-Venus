@@ -6,7 +6,7 @@ import * as chaiAsPromised from "chai-as-promised";
 
 import { AuthService } from "../services";
 import { FakeAdminRepository } from "./fakes";
-import { IAdmin } from "../interfaces";
+import { Admin } from "../interfaces";
 import {
   invalidLoginInformationError,
   invalidTokenError,
@@ -34,7 +34,7 @@ describe("AuthService", () => {
         access_token: "access_token",
         refresh_token: "refresh_token",
       };
-      const admin: IAdmin = { id: "admin", pw: "validpass" };
+      const admin: Admin = { id: "admin", pw: "validpass" };
 
       stub
         .withArgs({ id: "admin", type: "access" }, jwtSecret, {
@@ -51,7 +51,7 @@ describe("AuthService", () => {
     });
 
     it("should throw invalid login info error with invalid id", () => {
-      const admin: IAdmin = { id: "invalid", pw: "validpass" };
+      const admin: Admin = { id: "invalid", pw: "validpass" };
 
       expect(authService.signIn(admin)).to.be.rejectedWith(
         invalidLoginInformationError
@@ -59,7 +59,7 @@ describe("AuthService", () => {
     });
 
     it("should throw invalid login info error with invalid pw", () => {
-      const admin: IAdmin = { id: "admin", pw: "invalidpass" };
+      const admin: Admin = { id: "admin", pw: "invalidpass" };
 
       expect(authService.signIn(admin)).to.be.rejectedWith(
         invalidLoginInformationError

@@ -1,12 +1,12 @@
 import {
-  IClubRepository,
-  IGetClubsResponse,
-  IUpdateClub,
+  ClubRepository,
+  GetClubsResponse,
+  UpdateClubRequest,
 } from "../../interfaces";
 import { Club } from "../../models";
 import FakeClubLocationRepository from "./FakeClubLocationRepository";
 
-export default class FakeClubRepository implements IClubRepository {
+export default class FakeClubRepository implements ClubRepository {
   private static _default: FakeClubRepository;
   private clubs: Club[] = [];
   private clubLocationRepository: FakeClubLocationRepository;
@@ -24,10 +24,10 @@ export default class FakeClubRepository implements IClubRepository {
     this.clubLocationRepository = clubLocationRepository;
   }
 
-  public findAll(): Promise<IGetClubsResponse[]> {
-    return new Promise<IGetClubsResponse[]>((resolve, reject) => {
+  public findAll(): Promise<GetClubsResponse[]> {
+    return new Promise<GetClubsResponse[]>((resolve, reject) => {
       const clubLocations = this.clubLocationRepository.getLocations();
-      const response: IGetClubsResponse[] = this.clubs.map((club) => {
+      const response: GetClubsResponse[] = this.clubs.map((club) => {
         for (let clubLocation of clubLocations) {
           if (clubLocation.location === club.location) {
             return {
@@ -65,8 +65,8 @@ export default class FakeClubRepository implements IClubRepository {
     });
   }
 
-  public findClubByNameWithLocation(name: string): Promise<IGetClubsResponse> {
-    return new Promise<IGetClubsResponse>((resolve) => {
+  public findClubByNameWithLocation(name: string): Promise<GetClubsResponse> {
+    return new Promise<GetClubsResponse>((resolve) => {
       const locations = this.clubLocationRepository.getLocations();
       const club = this.clubs.find((c) => c.name === name);
       for (let location of locations) {
@@ -84,7 +84,7 @@ export default class FakeClubRepository implements IClubRepository {
     });
   }
 
-  public updateClub(clubName: string, club: IUpdateClub): Promise<void> {
+  public updateClub(clubName: string, club: UpdateClubRequest): Promise<void> {
     return new Promise<void>((resolve) => {
       const idx = this.clubs.findIndex((club) => club.name === clubName);
       this.clubs[idx] = { ...this.clubs[idx], ...club };
