@@ -2,11 +2,11 @@ import { IAdmin, IAdminRepository } from "./admin";
 import {
   IClub,
   IClubFromORM,
-  IClubRepository,
   IClubLocationRepository,
+  IClubRepository,
   IUpdateClub,
 } from "./club";
-import { ILogger, IGetClubsResponse, IPatchClubRequest } from "./other";
+import { IGetClubsResponse, ILogger, IPatchClubRequest } from "./other";
 import { IStudentRepository } from "./student";
 import { INoticeRepository } from "./notice";
 

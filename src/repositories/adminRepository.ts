@@ -1,5 +1,5 @@
 import { Admin } from "../models";
-import { Repository, EntityRepository } from "typeorm";
+import { EntityRepository, Repository } from "typeorm";
 import { IAdminRepository } from "../interfaces";
 
 @EntityRepository(Admin)

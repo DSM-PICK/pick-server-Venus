@@ -1,9 +1,9 @@
 import {
-  IClubRepository,
   IClub,
-  IStudentRepository,
   IClubLocationRepository,
+  IClubRepository,
   IGetClubsResponse,
+  IStudentRepository,
   IUpdateClub,
 } from "../interfaces";
 import { Club } from "../models";

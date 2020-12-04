@@ -1,5 +1,4 @@
 import {
-  IClub,
   IClubRepository,
   IGetClubsResponse,
   IUpdateClub,

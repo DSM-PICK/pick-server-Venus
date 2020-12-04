@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { getCustomRepository } from "typeorm";
 
 import { IPatchClubRequest } from "../interfaces/other";
-import {
+import getNoticeEventEmitter, {
   clubAdd,
   clubDelete,
   clubInfoChange,
@@ -15,7 +15,6 @@ import {
   NoticeRepository,
   StudentRepository,
 } from "../repositories";
-import getNoticeEventEmitter from "../loaders/noticeEventEmitter";
 import { IClub, IUpdateClub } from "../interfaces/club";
 import ClubService from "../services/clubService";
 

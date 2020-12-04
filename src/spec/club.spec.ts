@@ -2,9 +2,9 @@ import { expect } from "chai";
 
 import { ClubService } from "../services";
 import {
+  FakeClubLocationRepository,
   FakeClubRepository,
   FakeStudentRepository,
-  FakeClubLocationRepository,
 } from "./fakes";
 import { Club } from "../models";
 import {

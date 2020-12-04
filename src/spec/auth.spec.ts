@@ -1,5 +1,6 @@
 import * as sinon from "sinon";
 import * as jwt from "jsonwebtoken";
+import { TokenExpiredError } from "jsonwebtoken";
 import { expect, use } from "chai";
 import * as chaiAsPromised from "chai-as-promised";
 
@@ -11,7 +12,6 @@ import {
   invalidTokenError,
   notRefreshTokenError,
 } from "../errors";
-import { TokenExpiredError } from "jsonwebtoken";
 
 use(chaiAsPromised);
 
