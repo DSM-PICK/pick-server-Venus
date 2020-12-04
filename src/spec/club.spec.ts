@@ -6,7 +6,6 @@ import {
   FakeClubRepository,
   FakeStudentRepository,
 } from "./fakes";
-import { Club } from "../models";
 import {
   clubLocationNotFoundError,
   clubNotFoundError,
