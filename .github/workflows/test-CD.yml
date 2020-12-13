@@ -1,0 +1,70 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [ test ]
+  pull_request:
+    branches: [ test ]
+
+jobs:
+  CI:
+    runs-on: ubuntu-latest
+    env:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+    strategy:
+      matrix:
+        node-version: [12.18.3]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: NodeJS Installation ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Dependencies Installation
+        run: npm ci
+
+      - name: build
+        run: npm run build
+
+      - name: install codecov
+        run: npm i -g codecov
+
+      - name: test
+        run: npm run cover
+
+      - name: report
+        run: npm run report
+
+      - name: codecov
+        run: codecov
+  CD:
+    runs-on: ubuntu-latest
+
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+    needs: CI
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: docker image build
+        run: docker build -t dkssud9556/venus:test .
+
+      - name: upload to registry
+        uses: elgohr/Publish-Docker-Github-Action@master
+        with:
+          name: dkssud9556/venus
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          tags: "test"
+      
+      - uses: act10ns/slack@v1
+        with:
+          status: ${{ job.status }}
+          steps: ${{ toJson(steps) }}
+        if: always()
