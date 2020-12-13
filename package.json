@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "cross-env NODE_ENV=development mocha --exit -r ts-node/register src/spec/**/*.spec.ts",
-    "dev": "cross-env NODE_ENV=development nodemon --exec ts-node src/app.ts",
+    "dev": "cross-env NODE_ENV=development nodemon --exec ts-node src/app.local.ts",
+    "dev-not": "cross-env NODE_ENV=development nodemon --exec ts-node src/app.ts",
     "cover": "cross-env NODE_ENV=development nyc mocha --exit -r ts-node/register src/spec/**/*.spec.ts",
     "report": "nyc report --reporter=text-lcov > coverage.lcov",
     "build": "tsc"
@@ -22,6 +23,7 @@
   },
   "homepage": "https://github.com/DSM-PICK/pick-server-Venus#readme",
   "devDependencies": {
+    "@types/aws-serverless-express": "^3.3.3",
     "@types/bcrypt": "^3.0.0",
     "@types/chai": "^4.2.12",
     "@types/chai-as-promised": "^7.1.3",
@@ -50,6 +52,7 @@
     "typescript": "^3.9.7"
   },
   "dependencies": {
+    "aws-serverless-express": "^3.3.8",
     "bcrypt": "^5.0.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
