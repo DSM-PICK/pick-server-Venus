@@ -19,39 +19,32 @@ import { Club, UpdateClubRequest } from "../interfaces/club";
 import ClubService from "../services/clubService";
 
 export default class ClubController {
-  static studentRepository = getCustomRepository(StudentRepositoryImpl);
-  static clubRepository = getCustomRepository(ClubRepositoryImpl);
-  static noticeRepository = getCustomRepository(NoticeRepositoryImpl);
-  static clubLocationRepository = getCustomRepository(
+  private studentRepository = getCustomRepository(StudentRepositoryImpl);
+  private clubRepository = getCustomRepository(ClubRepositoryImpl);
+  private noticeRepository = getCustomRepository(NoticeRepositoryImpl);
+  private clubLocationRepository = getCustomRepository(
     ClubLocationRepositoryImpl
   );
-  static studentService = new StudentService(
-    ClubController.studentRepository,
-    ClubController.clubRepository
+  private studentService = new StudentService(
+    this.studentRepository,
+    this.clubRepository
   );
-  static clubService = new ClubService(
-    ClubController.clubRepository,
-    ClubController.clubLocationRepository,
-    ClubController.studentRepository
+  private clubService = new ClubService(
+    this.clubRepository,
+    this.clubLocationRepository,
+    this.studentRepository
   );
-  static noticeEventEmitter = getNoticeEventEmitter(
-    ClubController.noticeRepository
-  );
+  private noticeEventEmitter = getNoticeEventEmitter(this.noticeRepository);
 
-  static moveStudentsClub = async (
+  public moveStudentsClub = async (
     req: Request,
     res: Response,
     next: NextFunction
   ) => {
     const moveInfo: PatchClubRequest = req.body;
     const { students_num, to_club_name } = moveInfo;
-    const students = await ClubController.studentService.getStudentsByNums(
-      students_num
-    );
-    await ClubController.studentService.updateStudentClub(
-      to_club_name,
-      students_num
-    );
+    const students = await this.studentService.getStudentsByNums(students_num);
+    await this.studentService.updateStudentClub(to_club_name, students_num);
     const clubAndName = {};
     for (let student of students) {
       const { club_name, name } = student;
@@ -62,7 +55,7 @@ export default class ClubController {
     }
     const { id } = res.locals.payload;
     for (let clubName in clubAndName) {
-      ClubController.noticeEventEmitter.emit(
+      this.noticeEventEmitter.emit(
         studentClubChange,
         clubName,
         to_club_name,
@@ -73,50 +66,44 @@ export default class ClubController {
     res.status(200).json();
   };
 
-  static createClub = async (
+  public createClub = async (
     req: Request,
     res: Response,
     next: NextFunction
   ) => {
     const club: Club = req.body.club;
     const studentsNum: string[] = req.body.students_num;
-    const createdClub = await ClubController.clubService.addClub(
-      club,
-      studentsNum
-    );
+    const createdClub = await this.clubService.addClub(club, studentsNum);
     const { name, location } = club;
     const { id } = res.locals.payload;
-    ClubController.noticeEventEmitter.emit(clubAdd, name, location, id);
+    this.noticeEventEmitter.emit(clubAdd, name, location, id);
     res.status(200).json(createdClub);
   };
 
-  static deleteClub = async (
+  public deleteClub = async (
     req: Request,
     res: Response,
     next: NextFunction
   ) => {
     const { name } = req.params;
-    const { location } = await ClubController.clubService.getClubByName(name);
-    await ClubController.clubService.deleteClub(name);
+    const { location } = await this.clubService.getClubByName(name);
+    await this.clubService.deleteClub(name);
     const { id } = res.locals.payload;
-    ClubController.noticeEventEmitter.emit(clubDelete, name, location, id);
+    this.noticeEventEmitter.emit(clubDelete, name, location, id);
     res.status(200).json();
   };
 
-  static updateClubInformation = async (
+  public updateClubInformation = async (
     req: Request,
     res: Response,
     next: NextFunction
   ) => {
     const { name } = req.params;
     const clubInfoWillChange: UpdateClubRequest = req.body;
-    const beforeClub = await ClubController.clubService.getClubByName(name);
-    await ClubController.clubService.updateClubInformation(
-      name,
-      clubInfoWillChange
-    );
+    const beforeClub = await this.clubService.getClubByName(name);
+    await this.clubService.updateClubInformation(name, clubInfoWillChange);
     const { id } = res.locals.payload;
-    ClubController.noticeEventEmitter.emit(
+    this.noticeEventEmitter.emit(
       clubInfoChange,
       beforeClub,
       clubInfoWillChange,
@@ -125,24 +112,24 @@ export default class ClubController {
     res.status(200).json();
   };
 
-  static getClubInformation = async (
+  public getClubInformation = async (
     req: Request,
     res: Response,
     next: NextFunction
   ) => {
     const { name } = req.params;
-    const clubAndStudents = await ClubController.clubService.getClubByNameWithStudents(
+    const clubAndStudents = await this.clubService.getClubByNameWithStudents(
       name
     );
     res.status(200).json(clubAndStudents);
   };
 
-  static getAllClubs = async (
+  public getAllClubs = async (
     req: Request,
     res: Response,
     next: NextFunction
   ) => {
-    const clubs = await ClubController.clubService.getClubs();
+    const clubs = await this.clubService.getClubs();
     res.status(200).json(clubs);
   };
 }

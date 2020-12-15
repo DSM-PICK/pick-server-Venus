@@ -4,29 +4,27 @@ import { LocationService } from "../services";
 import { NextFunction, Request, Response } from "express";
 
 export default class LocationController {
-  static clubLocationRepository = getCustomRepository(
+  private clubLocationRepository = getCustomRepository(
     ClubLocationRepositoryImpl
   );
-  static locationService = new LocationService(
-    LocationController.clubLocationRepository
-  );
+  private locationService = new LocationService(this.clubLocationRepository);
 
-  static getAllLocations = async (
+  public getAllLocations = async (
     req: Request,
     res: Response,
     next: NextFunction
   ) => {
-    const clubs = await LocationController.locationService.getLocations();
+    const clubs = await this.locationService.getLocations();
     res.status(200).json(clubs);
   };
 
-  static searchLocations = async (
+  public searchLocations = async (
     req: Request,
     res: Response,
     next: NextFunction
   ) => {
     const { location } = req.query;
-    const searchResult = await LocationController.locationService.getLocationsByLocation(
+    const searchResult = await this.locationService.getLocationsByLocation(
       location as string
     );
     res.status(200).json(searchResult);
