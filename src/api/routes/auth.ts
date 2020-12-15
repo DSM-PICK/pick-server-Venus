@@ -12,18 +12,20 @@ import AuthController from "../../controllers/auth";
 const route = Router();
 
 export default (app: Router) => {
+  const authController = new AuthController();
+
   app.use("/auth", route);
 
   route.post(
     "/",
     validate({ schema: loginSchema, property: Property.BODY }),
-    tryCatchHandler(AuthController.signIn)
+    tryCatchHandler(authController.signIn)
   );
 
   route.patch(
     "/",
     validate({ schema: refreshSchema, property: Property.HEADERS }),
-    AuthController.signUp
+    authController.signUp
   );
 
   route.get("/check", isAuth, (req: Request, res: Response) => {

@@ -16,34 +16,36 @@ import ClubController from "../../controllers/club";
 const route = Router();
 
 export default (app: Router) => {
+  const clubController = new ClubController();
+
   app.use("/club", route);
 
   route.patch(
     "/students",
     isAuth,
     validate({ schema: patchClubSchema, property: Property.BODY }),
-    tryCatchHandler(ClubController.moveStudentsClub)
+    tryCatchHandler(clubController.moveStudentsClub)
   );
 
   route.post(
     "/",
     isAuth,
     validate({ schema: addClubSchema, property: Property.BODY }),
-    tryCatchHandler(ClubController.createClub)
+    tryCatchHandler(clubController.createClub)
   );
 
   route.get(
     "/:name",
     isAuth,
     validate({ schema: getClubNameSchema, property: Property.PARAMS }),
-    tryCatchHandler(ClubController.getClubInformation)
+    tryCatchHandler(clubController.getClubInformation)
   );
 
   route.delete(
     "/:name",
     isAuth,
     validate({ schema: deleteClubSchema, property: Property.PARAMS }),
-    tryCatchHandler(ClubController.deleteClub)
+    tryCatchHandler(clubController.deleteClub)
   );
 
   route.patch(
@@ -51,6 +53,6 @@ export default (app: Router) => {
     isAuth,
     validate({ schema: updateClubParamSchema, property: Property.PARAMS }),
     validate({ schema: updateClubBodySchema, property: Property.BODY }),
-    tryCatchHandler(ClubController.updateClubInformation)
+    tryCatchHandler(clubController.updateClubInformation)
   );
 };

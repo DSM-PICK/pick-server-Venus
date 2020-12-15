@@ -9,12 +9,14 @@ import StudentController from "../../controllers/student";
 const route = Router();
 
 export default (app: Router) => {
+  const studentController = new StudentController();
+
   app.use("/students", route);
 
   route.get(
     "/search",
     isAuth,
     validate({ schema: getStudentSearchSchema, property: Property.QUERY }),
-    tryCatchHandler(StudentController.searchStudents)
+    tryCatchHandler(studentController.searchStudents)
   );
 };
