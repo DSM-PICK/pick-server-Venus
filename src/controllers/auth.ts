@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { Admin } from "../interfaces/admin";
+import { Admin } from "../interfaces";
 import { getCustomRepository } from "typeorm";
 import { AdminRepositoryImpl } from "../repositories";
 import AuthService from "../services/authService";
