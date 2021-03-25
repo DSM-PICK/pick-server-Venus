@@ -13,7 +13,7 @@ export default class StudentRepositoryImpl extends Repository<Student>
         name: `%${name}%`,
       })
       .groupBy("student.club_name")
-      .getMany();
+      .getRawMany();
   }
 
   public findStudentsByClubName(clubName: string): Promise<Student[]> {
