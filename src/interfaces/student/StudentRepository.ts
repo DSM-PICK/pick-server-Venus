@@ -6,5 +6,5 @@ export default interface StudentRepository {
   findStudentsByNumAndName(numAndName: string): Promise<Student[]>;
   findStudentsByNums(nums: string[]): Promise<Student[]>;
   updateStudentClubToSelfStudy(clubName: string): Promise<void>;
-  findStudentsByName(name: string): Promise<Student[]>;
+  findStudentsByName(name: string): Promise<any>;
 }

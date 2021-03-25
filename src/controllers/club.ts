@@ -140,6 +140,6 @@ export default class ClubController {
   ) => {
     const { name } = req.params;
     const clubNames = await this.clubService.getClubsContainStudent(name);
-    return clubNames;
+    res.status(200).json(clubNames);
   };
 }
