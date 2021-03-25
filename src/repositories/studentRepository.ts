@@ -6,6 +6,16 @@ import { StudentRepository } from "../interfaces";
 @EntityRepository(Student)
 export default class StudentRepositoryImpl extends Repository<Student>
   implements StudentRepository {
+  findStudentsByName(name: string): Promise<Student[]> {
+    return this.createQueryBuilder("student")
+      .select("student.club_name")
+      .where("student.name LIKE :name", {
+        name: `%${name}%`,
+      })
+      .groupBy("student.club_name")
+      .getMany();
+  }
+
   public findStudentsByClubName(clubName: string): Promise<Student[]> {
     return this.find({ club_name: clubName });
   }
