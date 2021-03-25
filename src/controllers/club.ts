@@ -132,4 +132,14 @@ export default class ClubController {
     const clubs = await this.clubService.getClubs();
     res.status(200).json(clubs);
   };
+
+  public getClubsContainStudent = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    const { name } = req.params;
+    const clubNames = await this.clubService.getClubsContainStudent(name);
+    return clubNames;
+  };
 }
