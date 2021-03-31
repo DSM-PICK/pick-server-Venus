@@ -12,6 +12,10 @@ export default class FakeStudentRepository implements StudentRepository {
     return FakeStudentRepository._default;
   }
 
+  findStudentsByName(name: string): Promise<any> {
+    return null;
+  }
+
   public findStudentsByClubName(clubName: string): Promise<Student[]> {
     return new Promise((resolve) => {
       resolve(

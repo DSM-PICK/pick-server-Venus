@@ -1,4 +1,4 @@
-import { EntityRepository, Repository } from "typeorm";
+import { EntityRepository, getManager, Repository } from "typeorm";
 
 import { Student } from "../models";
 import { StudentRepository } from "../interfaces";
@@ -6,6 +6,13 @@ import { StudentRepository } from "../interfaces";
 @EntityRepository(Student)
 export default class StudentRepositoryImpl extends Repository<Student>
   implements StudentRepository {
+  async findStudentsByName(name: string): Promise<any> {
+    const entityManager = getManager();
+    return await entityManager.query(`
+      select club_name from student where name LIKE '%${name}%' group by club_name;
+    `);
+  }
+
   public findStudentsByClubName(clubName: string): Promise<Student[]> {
     return this.find({ club_name: clubName });
   }

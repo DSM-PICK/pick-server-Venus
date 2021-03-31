@@ -20,6 +20,10 @@ export default class ClubService {
     private studentRepository: StudentRepository
   ) {}
 
+  public getClubsContainStudent(name: string) {
+    return this.studentRepository.findStudentsByName(name);
+  }
+
   public getClubs(): Promise<GetClubsResponse[]> {
     return this.clubRepository.findAll();
   }
