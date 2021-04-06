@@ -9,9 +9,14 @@ import tryCatchHandler from "../middlewares/tryCatchHandler";
 const route = Router();
 
 export default (app: Router) => {
-	const teacherController = new TeacherController();
+  const teacherController = new TeacherController();
 
-	app.use('/teachers', route);
+  app.use("/teachers", route);
 
-	route.get('/search/:name', isAuth, validate({ schema: teacherSearchSchema, property: Property.PARAMS }), tryCatchHandler(teacherController.searchTeachers));
-}
+  route.get(
+    "/search/:name",
+    isAuth,
+    validate({ schema: teacherSearchSchema, property: Property.PARAMS }),
+    tryCatchHandler(teacherController.searchTeachers)
+  );
+};

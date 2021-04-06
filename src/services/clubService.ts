@@ -12,12 +12,14 @@ import {
   invalidParameterError,
   locationAlreadyAssignedError,
 } from "../errors";
+import TeacherRepository from "../interfaces/teacher/TeacherRepository";
 
 export default class ClubService {
   constructor(
     private clubRepository: ClubRepository,
     private clubLocationRepository: ClubLocationRepository,
-    private studentRepository: StudentRepository
+    private studentRepository: StudentRepository,
+    private teacherRepository: TeacherRepository
   ) {}
 
   public getClubsContainStudent(name: string) {
@@ -82,6 +84,9 @@ export default class ClubService {
           club[infoWillChange])
       ) {
         existentInfoCount++;
+        if (infoWillChange === 'teacher') {
+          this.teacherRepository.
+        }
         existentInfo[infoWillChange] = club[infoWillChange];
       }
     }

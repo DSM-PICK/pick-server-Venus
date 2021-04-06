@@ -4,15 +4,12 @@ import { Teacher } from "../models/teacher";
 
 @EntityRepository(Teacher)
 export default class TeacherRepositoryImpl extends Repository<Teacher>
-	implements TeacherRepository {
+  implements TeacherRepository {
+  public findTeachersByName(name: string) {
+    return this.createQueryBuilder()
+      .where("name LIKE :name", { name: `%${name}%` })
+      .getMany();
+  }
 
-	public findTeachersByName(name: string) {
-		return this.createQueryBuilder()
-			.where('name LIKE :name', { name: `%${name}%` })
-			.getMany();
-	}
-
-	public updateManagedClub(name: string, clubName: string) {
-		
-	}
+  public updateManagedClub(name: string, clubName: string) {}
 }
