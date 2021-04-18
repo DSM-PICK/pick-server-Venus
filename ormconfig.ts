@@ -1,5 +1,12 @@
 import config from "./src/config";
-import { Admin, Club, Student, ClubLocation, Notice } from "./src/models";
+import {
+  Admin,
+  Club,
+  Student,
+  ClubLocation,
+  Notice,
+  Teacher,
+} from "./src/models";
 
 export = {
   type: "mysql",
@@ -10,5 +17,5 @@ export = {
   database: config.mysql.dbName,
   synchronize: false,
   logging: false,
-  entities: [Admin, Club, Student, ClubLocation, Notice],
+  entities: [Admin, Club, Student, ClubLocation, Notice, Teacher],
 };
