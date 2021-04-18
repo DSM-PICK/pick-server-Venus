@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { auth, club, clubs, locations, students } from "./routes";
 import logger from "../loaders/logger";
+import teachers from "./routes/teachers";
 
 export default () => {
   const app = Router();
@@ -22,6 +23,7 @@ export default () => {
   club(app);
   locations(app);
   students(app);
+  teachers(app);
 
   return app;
 };
