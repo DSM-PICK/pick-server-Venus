@@ -14,6 +14,6 @@ export default class TeacherController {
   ) => {
     const { name } = req.params;
     const searchResult = await this.teacherService.findTeachersByName(name);
-    return searchResult;
+    res.status(200).json(searchResult);
   };
 }
