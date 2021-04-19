@@ -1,6 +1,6 @@
 import { EntityRepository, Repository } from "typeorm";
 import TeacherRepository from "../interfaces/teacher/TeacherRepository";
-import { Teacher } from "../models/teacher";
+import { Teacher } from "../models";
 
 @EntityRepository(Teacher)
 export default class TeacherRepositoryImpl extends Repository<Teacher>
