@@ -58,7 +58,7 @@ jobs:
       - name: upload to registry
         uses: elgohr/Publish-Docker-Github-Action@master
         with:
-          name: dkssud9556/venus
+          name: eungyeole/venus
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           tags: "latest"
